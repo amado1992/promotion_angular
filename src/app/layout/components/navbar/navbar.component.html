@@ -1,0 +1,75 @@
+<div *ngIf="horizontalMenu" class="navbar-header d-xl-block d-none">
+    <!-- Navbar brand -->
+    <ul class="nav navbar-nav flex-row">
+        <li class="nav-item">
+            <a class="navbar-brand" [routerLink]="['/']">
+                <span class="brand-logo">
+                    <img src="{{ coreConfig.app.appLogoImage }}" alt="brand-logo" width="36" />
+                </span>
+                <h2 class="brand-text mb-0">{{ coreConfig.app.appName }}</h2>
+            </a>
+        </li>
+    </ul>
+    <!--/ Navbar brand -->
+</div>
+
+<div class="navbar-container d-flex content">
+    <div class="bookmark-wrapper d-flex align-items-center">
+        <!-- Menu Toggler | Menu icon will be hidden in case of layout without menu -->
+        <ul class="nav navbar-nav d-xl-none" *ngIf="!coreConfig.layout.menu.hidden">
+            <li class="nav-item">
+                <a class="nav-link menu-toggle" (click)="toggleSidebar('menu')">
+                    <span [data-feather]="'menu'" [class]="'ficon'"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <ul class="nav navbar-nav align-items-center">
+
+        <li ngbDropdown class="nav-item dropdown-user">
+            <a class="nav-link dropdown-toggle dropdown-user-link" ngbDropdownToggle id="navbarUserDropdown"
+                aria-haspopup="true" aria-expanded="false">
+
+                <div class="avatar mr-1 ml-0" *ngIf="currentUser && avatar === ''" [ngClass]="{
+                        'bg-light-success': currentUser.status == 'Activo',
+                        'bg-light-danger': currentUser.status == 'Inactivo',
+                        'bg-light-warning': currentUser.status == 'Pendiente'
+                     }">
+                    <div class="avatar-content">
+                        {{ currentUser.name + ' ' + currentUser.last_name | initials | uppercase }}
+                    </div>
+                </div>
+
+                <span class="avatar" *ngIf="avatar !== ''">
+                    <img class="round" src="{{avatar}}" alt="avatar" height="40" width="40" />
+                    <span class="avatar-status-online"></span>
+                </span>
+
+                <div class="user-nav d-sm-flex d-none align-items-start" *ngIf="currentUser">
+                    <span class="user-name font-weight-bolder">{{currentUser.name + ' ' +
+                        currentUser.last_name}}</span>
+                    <span class="user-status">{{currentUser.role.name}}</span>
+                </div>
+            </a>
+            <div ngbDropdownMenu aria-labelledby="navbarUserDropdown" class="dropdown-menu dropdown-menu-right">
+                <a ngbDropdownItem [routerLink]="['/users/account-settings']">
+                    <span [data-feather]="'user'" [class]="'mr-50'"></span> Mi Perfil
+                </a>
+                <a ngbDropdownItem [routerLink]="['/users/account-settings']" fragment="password">
+                    <span [data-feather]="'lock'" [class]="'mr-50'"></span>Cambiar Contraseña
+                </a>
+                <a ngbDropdownItem (click)="onLogout()">
+                    <span [data-feather]="'power'" [class]="'mr-50'"></span> Cerrar Sesión
+                </a>
+            </div>
+        </li>
+        <!--/ User Dropdown -->
+    </ul>
+
+    <a class="ml-auto" style="margin-right: 10px; margin-top: 6px;">
+        <span>
+            <img src="assets/images/icons/system/menu/icon_salir.svg" alt="lock" width="25" (click)="onLogout()" />
+        </span>
+    </a>
+</div>

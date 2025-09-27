@@ -1,0 +1,288 @@
+<div class="content-wrapper">
+    <div class="content-body">
+        <!-- Inventories List Start -->
+        <section class="users-list-wrapper">
+            <!-- Inventories Filter Start -->
+            <div class="card">
+                <form [formGroup]="_filterForm" (ngSubmit)="onFilterAll()">
+                    <h5 class="card-header">
+                        <div class="d-flex align-items-center">Filtro de Búsqueda</div>
+                        <div class="d-flex align-items-center heading-elements">
+                            <a (click)="onCollapse()" data-action="collapse" tooltipClass="fadeInAnimation"
+                                placement="top" ngbTooltip="{{(_collapseStatus ? 'Mostrar' : 'Cerrar')}}"
+                                [ngClass]="{ rotate: _collapseStatus }" [attr.aria-expanded]="_collapseStatus">
+                                <i class="feather icon-chevron-up font-medium-2 mr-1"></i>
+                            </a>
+                            <a (click)="onFilterAll()" tooltipClass="fadeInAnimation" placement="top"
+                                ngbTooltip="Filtrar">
+                                <i data-feather="search" class="cursor-pointer font-medium-2 mr-1"></i>
+                            </a>
+                            <a (click)="onClean()" tooltipClass="fadeInAnimation" placement="top" ngbTooltip="Limpiar">
+                                <i data-feather="droplet" class="cursor-pointer font-medium-2 mr-1"></i>
+                            </a>
+                            <a (click)="onExportExcel()" tooltipClass="fadeInAnimation" placement="top"
+                                ngbTooltip="Exportar a excel">
+                                <i data-feather="file" class="cursor-pointer font-medium-2"></i>
+                            </a>
+                        </div>
+                    </h5>
+                    <div class="card-body" [ngbCollapse]="_collapseStatus">
+                        <div class="users-list-filter">
+                            <div class="row">
+                                <div class="col-12 col-md-12 col-lg-12">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="input-group w-0 pl-1">
+                                                <input name="datepicker" class="form-control" ngbDatepicker
+                                                    #datepicker="ngbDatepicker" [autoClose]="'outside'"
+                                                    (dateSelect)="onDateSelection($event)" [displayMonths]="2"
+                                                    [dayTemplate]="rangeSelectionDP" outsideDays="hidden"
+                                                    [startDate]="fromDate!" />
+                                                <ng-template #rangeSelectionDP let-date let-focused="focused">
+                                                    <span class="custom-day" [class.focused]="focused"
+                                                        [class.range]="isRange(date)"
+                                                        [class.faded]="isHovered(date) || isInside(date)"
+                                                        (mouseenter)="hoveredDate = date"
+                                                        (mouseleave)="hoveredDate = null">
+                                                        {{ date.day }}
+                                                    </span>
+                                                </ng-template>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input #dpFromDate class="form-control" placeholder="dd/mm/yyyy"
+                                                    name="dpFromDate" [value]="formatter.format(fromDate)" />
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary feather icon-calendar"
+                                                        (click)="datepicker.toggle()" type="button" rippleEffect>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ml-sm-2" style="margin-left: 13px !important;">
+                                            <div class="input-group">
+                                                <input #dpToDate class="form-control" placeholder="dd/mm/yyyy"
+                                                    name="dpToDate" [value]="formatter.format(toDate)" />
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary feather icon-calendar"
+                                                        (click)="datepicker.toggle()" type="button" rippleEffect>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                                    <label for="categorys_id">Categoría</label>
+                                    <ng-select placeholder="Categoría" id="categorys_id" class="form-control-select"
+                                        formControlName="categorys_id">
+                                        <ng-option *ngFor="let item of _categories" [value]="item.id">
+                                            {{item.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+
+                                <div class="col-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                                    <label for="brands_id">Marca</label>
+                                    <ng-select placeholder="Marca" id="brands_id" class="form-control-select"
+                                        formControlName="brands_id">
+                                        <ng-option *ngFor="let item of _brands" [value]="item.id">
+                                            {{item.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+
+                                <div class="col-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                                    <label for="branch_offices_id">Sucursal</label>
+                                    <ng-select placeholder="Buscar" id="branch_offices_id" class="form-control-select"
+                                        formControlName="branch_offices_id" [loading]="_loadingBranchOffices">
+                                        <ng-option *ngFor="let item of _branchsOffices" [value]="item.id">
+                                            {{ item.number + "-" + item.name }}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+
+                                <div class="col-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                                    <label for="providers_id">Proveedor</label>
+                                    <ng-select placeholder="Buscar" id="providers_id" class="form-control-select"
+                                        formControlName="providers_id" [loading]="_loadingProvider">
+                                        <ng-option *ngFor="let item of _providers" [value]="item.id">
+                                            {{item.reason_social}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+
+                                <div class="col-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                                    <label for="product_id">Producto</label>
+                                    <ng-select placeholder="Buscar" [loading]="_loadingProduct" id="product_id"
+                                        class="form-control-select" name="product_id" formControlName="product_id"
+                                        notFoundText="No se encontró." (search)="getAllProductsBySearch($event)"
+                                        [readonly]="false">
+                                        <ng-option *ngFor="let item of _products" [value]="item.id">
+                                            {{item.number}} - {{item.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+
+                                <div class="col-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                                    <label for="motive_movement_id">Motivo de movimiento</label>
+                                    <ng-select placeholder="Motivo de movimiento" id="motive_movement_id"
+                                        class="form-control-select" formControlName="motive_movement_id">
+                                        <ng-option *ngFor="let item of _motive_movements" [value]="item.id">
+                                            {{item.name}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <button type="submit" class="hidden"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Inventories Filter End -->
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <div class="d-flex justify-content-between align-items-center m-1">
+                            <label class="d-flex align-items-center">Mostrar
+                                <select class="form-control mx-25" [(ngModel)]="_pageModel.limit"
+                                    (ngModelChange)="onChangeLimit($event)">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                entradas
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12 d-flex justify-content-start justify-content-md-end">
+                        <div class="d-flex align-items-center"
+                            [ngClass]="this._permissions_values.create ? 'ml-1 ml-md-0' : 'pr-1 pb-1 pb-md-0'">
+                            <form [formGroup]="_filterSearch">
+                                <input type="text" class="form-control ml-25" formControlName="search"
+                                    spellcheck="false" placeholder="Buscar" (keyup)="onSearchFilter()" />
+                            </form>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-end pr-1 pb-1 pb-md-0 add"
+                            *appPermission="_permissions.create">
+                            <button type="button" class="btn btn-primary ml-1" rippleEffect
+                                [routerLink]="['/inventories/new']">
+                                <i data-feather="plus" class="d-sm-none d-inline-block mr-0 mr-sm-1"></i>
+                                <span class="d-none d-sm-inline-block">Nuevo inventario</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <ngx-datatable class="bootstrap core-bootstrap" [rows]="rows" [columnMode]="ColumnMode.force"
+                    [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [rowClass]="getRowClass"
+                    [scrollbarH]="true" [rowHeight]="58" [externalPaging]="true" [externalSorting]="true"
+                    [loadingIndicator]="true" [count]="_pageModel.count" [offset]="_pageModel.offset"
+                    [limit]="_pageModel.limit" [sortType]="SortType.single" (page)="onPageCallback($event)"
+                    (sort)="onSortCallback($event)">
+
+                    <ngx-datatable-column [width]="25" [sortable]="false">
+                        <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                            <div class="d-flex align-items-center">
+                                <div class="media ml-1">
+                                    <div
+                                        *ngIf="row.url_complete != '' && row.url_complete != undefined; else defaultImage">
+                                        <img class="rounded mr-50" src="{{ row.url_complete }}" height="50" width="50"
+                                            alt="Imagen" />
+                                    </div>
+                                    <ng-template #defaultImage>
+                                        <img class="rounded mr-50"
+                                            src="assets/images/icons/system/configuration/icon_product.png" height="50"
+                                            width="50" alt="Imagen" />
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Producto" [width]="25" [sortable]="false">
+                        <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                            <div class="d-flex align-items-center">
+                                {{ row.product?.name }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Inventario" [width]="25" [sortable]="false">
+                        <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                            <div class="d-flex align-items-center">
+                                {{ row.folio }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Sucursal" [width]="25" [sortable]="false">
+                        <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                            <div class="d-flex align-items-center">
+                                {{ row.branchOffices?.name }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Creación" [width]="50" [sortable]="false">
+                        <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                            <div class="d-flex align-items-center">
+                                {{ row.date_created | date: "MMM dd, yyyy" }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Pieza" [width]="25" [sortable]="false">
+                        <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                            <div class="d-flex align-items-center" style="width: 135px;
+                                          height: 50px;
+                                          background: green;
+                                          color: #fff;
+                                          text-align: center;
+                                          padding-left: 12px;
+                                          font-weight: bold;">
+                                <ng-container *ngIf="row.quantity == 5; else otherQuantity">
+                                    <div class="red-circle" tooltipClass="fadeInAnimation" placement="left" ngbTooltip="Solo quedan 5 productos, es necesario adicionar más al
+                                                                                                    inventario.">
+                                        {{ row.quantity }}{{row.unitMeasurement?.symbol}}
+                                    </div>
+                                </ng-container>
+                                <ng-template #otherQuantity>
+                                    <div>
+                                        {{ row.quantity }} {{row.unitMeasurement?.symbol}}
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Acciones" [width]="25" [sortable]="false">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                            <ng-container>
+                                <a (click)="onUpdateInventory(row)" class="text-primary" tooltipClass="fadeInAnimation"
+                                    placement="right-bottom" ngbTooltip="Editar" *appPermission="_permissions.update">
+                                    <span [data-feather]="'edit'" [size]="16" [class]="'mr-50'"></span>
+                                </a>
+                                <a (click)="onDestroy(row)" class="text-danger" tooltipClass="fadeInAnimation"
+                                    placement="right-bottom" ngbTooltip="Eliminar"
+                                    *appPermission="_permissions.destroy">
+                                    <span [data-feather]="'trash-2'" [size]="16" [class]="'mr-50'"></span>
+                                </a>
+                                <a (click)="onInventoryMovements($event, row)" class="text-success"
+                                    tooltipClass="fadeInAnimation" placement="left-bottom" ngbTooltip="Movimientos"
+                                    *appPermission="_permissions.read">
+                                    <span [data-feather]="'activity'" [size]="16" [class]="'mr-50'"></span>
+                                </a>
+                            </ng-container>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                </ngx-datatable>
+            </div>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+@import '../@core/scss/angular/libs/datatables.component.scss';
+@import '../@core/scss/base/bootstrap-extended/include';
+@import '../@core/scss/angular/libs/select.component.scss';
+
+$color-box-size: 2.714rem;
+
+.app-inventories-details {
+  .dataTables_wrapper {
+    .dataTables_length {
+      select {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    .header-actions {
+      .dataTables_length {
+        text-align: left;
+      }
+
+      & > div[class^='col-']:last-child {
+        padding-left: 0;
+      }
+    }
+  }
+}
+
+html[data-textdirection='rtl'] {
+  .app-inventories-details {
+    .dataTables_filter {
+      input {
+        margin-right: 0;
+        margin-left: 0.5rem;
+      }
+    }
+
+    .dropdown .dropdown-menu.dropdown-menu-right {
+      right: 3.57rem !important;
+    }
+  }
+}

@@ -1,0 +1,391 @@
+<div class="content-wrapper">
+    <div class="content-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+
+                    <div class="modal-header bg-primary">
+                        <img class="icon_customer" src="assets/images/icons/system/menu/icon_clientes_blue.svg">
+                        <h6 class="mb-0 font-medium-5 text-white">Nuevo cliente</h6>
+                        <button type="button" class="close" (click)="onClose()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="card-body">
+                        <ul ngbNav #navWithIcons="ngbNav" class="nav-tabs">
+                            <li ngbNavItem>
+                                <a ngbNavLink>Datos Generales</a>
+                                <ng-template ngbNavContent>
+                                    <form [formGroup]="_addNewCustomerForm" (ngSubmit)="onCreate()">
+                                        <div class="row">
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="reason_social">Nombre Completo o Razón Social</label>
+                                                <input type="text" class="form-control" id="reason_social"
+                                                    [ngClass]="{ 'is-invalid': _submitted && controls.reason_social.errors }"
+                                                    formControlName="reason_social"
+                                                    placeholder="Nombre Completo o Razón Social" />
+                                                <div *ngIf="_submitted && controls.reason_social.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.reason_social.errors.required">
+                                                        Nombre Completo o Razón Social es requerido
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="rfc">RFC - (El Genérico: XAXX010101000)</label>
+                                                <input type="text" class="form-control" id="rfc"
+                                                    [ngClass]="{ 'is-invalid': _submitted && controls.rfc.errors }"
+                                                    formControlName="rfc" placeholder="RFC"
+                                                    (ngModelChange)="onChangeRFC($event)" />
+                                                <div *ngIf="_submitted && controls.rfc.errors" class="invalid-feedback">
+                                                    <div *ngIf="controls.rfc.errors.required"> RFC es requerido
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="fiscal_regimen">Régimen Fiscal</label>
+                                                <ng-select id="fiscal_regimen" class="form-control-select"
+                                                    formControlName="fiscal_regimen"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.fiscal_regimen.errors }">
+                                                    <ng-option value="" disabled selected>Régimen Fiscal</ng-option>
+                                                    <ng-option *ngFor="let item of _fiscal_regimens"
+                                                        [value]="item.id">{{item.description}}</ng-option>
+                                                </ng-select>
+                                                <div *ngIf="_submitted && controls.fiscal_regimen.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.fiscal_regimen.errors.required">Régimen Fiscal
+                                                        es requerido</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="use_cfdi">Uso de CFDI</label>
+                                                <ng-select id="use_cfdi" class="form-control-select"
+                                                    formControlName="use_cfdi"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.use_cfdi.errors }">
+                                                    <ng-option value="" disabled selected>Uso de CFDI</ng-option>
+                                                    <ng-option *ngFor="let item of _use_cfdis"
+                                                        [value]="item.id">{{item.description}}</ng-option>
+                                                </ng-select>
+                                                <div *ngIf="_submitted && controls.use_cfdi.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.use_cfdi.errors.required">Uso de CFDI es
+                                                        requerido</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="email">Correo Electrónico</label>
+                                                <input type="text" class="form-control" id="email"
+                                                    [ngClass]="{ 'is-invalid': _submitted && controls.email.errors }"
+                                                    formControlName="email" placeholder="Correo Electrónico" />
+                                                <div *ngIf="_submitted && controls.email.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.email.errors.required">
+                                                        Correo Electrónico es requerido
+                                                    </div>
+                                                    <div *ngIf="controls.email.errors.email">
+                                                        El correo debe ser una dirección de correo electrónico válida
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="cellphone">Celular</label>
+                                                <div class="input-group input-group-merge"
+                                                    [ngClass]="{ 'is-invalid': _submitted && controls.cellphone.errors }">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="area-cellphone">
+                                                            + {{_area}}
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="cellphone"
+                                                        mask="00 0000 0000"
+                                                        [ngClass]="{ 'is-invalid': _submitted && controls.cellphone.errors }"
+                                                        formControlName="cellphone" placeholder="Celular" />
+                                                </div>
+                                                <div *ngIf="_submitted && controls.cellphone.errors"
+                                                    class="invalid-feedback"
+                                                    [ngClass]="{ 'd-block': _submitted && controls.cellphone.errors }">
+                                                    <div *ngIf="controls.cellphone.errors.required"> Celular es
+                                                        requerido</div>
+                                                    <div *ngIf="controls.cellphone.errors.mask"> El formato del celular
+                                                        no es válido</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="phone">Teléfono</label>
+                                                <div class="input-group input-group-merge"
+                                                    [ngClass]="{ 'is-invalid': _submitted && controls.phone.errors }">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="area-phone">
+                                                            + {{_area}}
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="phone"
+                                                        mask="00 0000 0000"
+                                                        [ngClass]="{ 'is-invalid': _submitted && controls.phone.errors }"
+                                                        formControlName="phone" placeholder="Teléfono" />
+                                                </div>
+                                                <div *ngIf="_submitted && controls.phone.errors"
+                                                    class="invalid-feedback"
+                                                    [ngClass]="{ 'd-block': _submitted && controls.phone.errors }">
+                                                    <div *ngIf="controls.phone.errors.required"> Teléfono es requerido
+                                                    </div>
+                                                    <div *ngIf="controls.phone.errors.mask"> El formato del teléfono no
+                                                        es válido</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <h6 class="mb-1 font-medium-5 border-bottom"
+                                                    style="color: #7a7b7d !important;">Dirección Fiscal</h6>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="street">Calle</label>
+                                                <input type="text" class="form-control" id="street"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.street.errors }"
+                                                    formControlName="street" placeholder="Calle" />
+                                                <div *ngIf="_submitted && controls.street.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.street.errors.required"> Calle es requerida
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="exterior_number">Nro Exterior</label>
+                                                <input type="text" class="form-control" id="exterior_number"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.exterior_number.errors }"
+                                                    formControlName="exterior_number" placeholder="Nro Exterior" />
+                                                <div *ngIf="_submitted && controls.exterior_number.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.exterior_number.errors.required"> Nro Exterior
+                                                        es requerido</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="interior_number">Nro Interior</label>
+                                                <input type="text" class="form-control" id="interior_number"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.interior_number.errors }"
+                                                    formControlName="interior_number" placeholder="Nro Interior" />
+                                                <div *ngIf="_submitted && controls.interior_number.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.interior_number.errors.required"> Nro Interior
+                                                        es requerido</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="postal_code">Código Postal</label>
+                                                <input type="text" class="form-control" id="postal_code" mask="00000"
+                                                    [ngClass]="{ 'is-invalid': _submitted && controls.postal_code.errors }"
+                                                    formControlName="postal_code" placeholder="Código Postal"
+                                                    (ngModelChange)="onChangePostalCode($event)" />
+                                                <div *ngIf="_submitted && controls.postal_code.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.postal_code.errors.required"> Código Postal es
+                                                        requerido</div>
+                                                    <div *ngIf="controls.postal_code.errors.mask"> El formato del código
+                                                        postal no es válido</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="cologne">Colonia</label>
+                                                <ng-select id="cologne" class="form-control-select"
+                                                    formControlName="cologne"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.cologne.errors }">
+                                                    <ng-option value="" disabled selected>Colonia</ng-option>
+                                                    <ng-option *ngFor="let item of _colognes"
+                                                        [value]="item.id">{{item.name}}</ng-option>
+                                                </ng-select>
+                                                <div *ngIf="_submitted && controls.cologne.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.cologne.errors.required">Colonia es requerida
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="location">Localidad</label>
+                                                <ng-select id="location" class="form-control-select"
+                                                    formControlName="location"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.location.errors }">
+                                                    <ng-option value="" disabled selected>Localidad</ng-option>
+                                                    <ng-option *ngFor="let item of _locations"
+                                                        [value]="item.id">{{item.name}}</ng-option>
+                                                </ng-select>
+                                                <div *ngIf="_submitted && controls.location.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.location.errors.required">Localidad es
+                                                        requerida</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="municipality">Municipio</label>
+                                                <ng-select id="municipality" class="form-control-select"
+                                                    formControlName="municipality"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.municipality.errors }">
+                                                    <ng-option value="" disabled selected>Municipio</ng-option>
+                                                    <ng-option *ngFor="let item of _municipalities"
+                                                        [value]="item.id">{{item.name}}</ng-option>
+                                                </ng-select>
+                                                <div *ngIf="_submitted && controls.municipality.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.municipality.errors.required"> Municipio es
+                                                        requerido</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="state_country">Estado</label>
+                                                <ng-select id="state_country" class="form-control-select"
+                                                    formControlName="state_country"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.state_country.errors }">
+                                                    <ng-option value="" disabled selected>Estado</ng-option>
+                                                    <ng-option *ngFor="let item of _states_countries"
+                                                        [value]="item.id">{{item.name}}</ng-option>
+                                                </ng-select>
+                                                <div *ngIf="_submitted && controls.state_country.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.state_country.errors.required">Estado es
+                                                        requerido</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="country">País</label>
+                                                <ng-select id="country" class="form-control-select"
+                                                    formControlName="country"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.country.errors }"
+                                                    (ngModelChange)="onChangeCountry($event)">
+                                                    <ng-option value="" disabled selected>País</ng-option>
+                                                    <ng-option *ngFor="let item of _countries"
+                                                        [value]="item.id">{{item.name}}</ng-option>
+                                                </ng-select>
+                                                <div *ngIf="_submitted && controls.country.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.country.errors.required">País es requerido
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!--
+                                            <div class="col-12">
+                                                <h6 class="mb-1 font-medium-5 border-bottom"
+                                                    style="color: #7a7b7d !important;">Datos Adicionales</h6>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="payment_term">Plazo de Pago</label>
+                                                <ng-select id="payment_term" class="form-control-select"
+                                                    formControlName="payment_term"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.payment_term.errors }">
+                                                    <ng-option value="" disabled selected>Plazo de Pago</ng-option>
+                                                    <ng-option [value]="8">8 días</ng-option>
+                                                    <ng-option [value]="30">30 días</ng-option>
+                                                    <ng-option [value]="45">45 días</ng-option>
+                                                    <ng-option [value]="65">65 días</ng-option>
+                                                </ng-select>
+                                                <div *ngIf="_submitted && controls.payment_term.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.payment_term.errors.required">Plazo de Pago es
+                                                        requerido</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="payment_method">Método de Pago</label>
+                                                <ng-select id="payment_method" class="form-control-select"
+                                                    formControlName="payment_method"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.payment_method.errors }"
+                                                    (change)="onChangePaymentMethod($event)">
+                                                    <ng-option value="" disabled selected>Método de Pago</ng-option>
+                                                    <ng-option *ngFor="let item of _payment_methods"
+                                                        [value]="item.id">{{item.description}}</ng-option>
+                                                </ng-select>
+                                                <div *ngIf="_submitted && controls.payment_method.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.payment_method.errors.required">Método de Pago
+                                                        es requerido</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="payment_format">Formato de Pago</label>
+                                                <ng-select id="payment_format" class="form-control-select"
+                                                    formControlName="payment_format"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.payment_format.errors }"
+                                                    [readonly]="_payment_format_read_only">
+                                                    <ng-option value="" disabled selected>Formato de Pago</ng-option>
+                                                    <ng-option *ngFor="let item of _filter_payment_formats"
+                                                        [value]="item.id">{{item.description}}</ng-option>
+                                                </ng-select>
+                                                <div *ngIf="_submitted && controls.payment_format.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.payment_format.errors.required">Formato de Pago
+                                                        es requerido</div>
+                                                </div>
+                                            </div>
+                                            -->
+
+
+                                            <div class="col-12">
+                                                <h6 class="mb-1 font-medium-5 border-bottom"
+                                                    style="color: #7a7b7d !important;">Contacto</h6>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="contact_name">Nombre</label>
+                                                <input type="text" class="form-control" id="contact_name"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.contact_name.errors }"
+                                                    formControlName="contact_name" placeholder="Nombre" />
+                                                <div *ngIf="_submitted && controls.contact_name.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.contact_name.errors.required"> Nombre es
+                                                        requerido</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="contact_email">Correo Electrónico</label>
+                                                <input type="text" class="form-control" id="contact_email"
+                                                    [ngClass]="{ 'is-invalid error': _submitted && controls.contact_email.errors }"
+                                                    formControlName="contact_email" placeholder="Correo Electrónico" />
+                                                <div *ngIf="_submitted && controls.contact_email.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="controls.contact_email.errors.required">
+                                                        Correo Electrónico es requerido
+                                                    </div>
+                                                    <div *ngIf="controls.contact_email.errors.email">
+                                                        El correo debe ser una dirección de correo electrónico válida
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 form-group">
+                                                <label for="contact_phone">Teléfono</label>
+                                                <div class="input-group input-group-merge"
+                                                    [ngClass]="{ 'is-invalid': _submitted && controls.contact_phone.errors }">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="area-contact-phone">
+                                                            + {{_area}}
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="contact_phone"
+                                                        mask="00 0000 0000"
+                                                        [ngClass]="{ 'is-invalid': _submitted && controls.contact_phone.errors }"
+                                                        formControlName="contact_phone" placeholder="Teléfono" />
+                                                </div>
+                                                <div *ngIf="_submitted && controls.contact_phone.errors"
+                                                    class="invalid-feedback"
+                                                    [ngClass]="{ 'd-block': _submitted && controls.contact_phone.errors }">
+                                                    <div *ngIf="controls.contact_phone.errors.required"> Teléfono es
+                                                        requerido</div>
+                                                    <div *ngIf="controls.contact_phone.errors.mask"> El formato del
+                                                        teléfono no es válido</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success" rippleEffect> Guardar</button>
+                                            <button type="button" class="btn btn-secondary" (click)="onClose()"
+                                                rippleEffect> Cancelar</button>
+                                        </div>
+                                    </form>
+                                </ng-template>
+                            </li>
+                        </ul>
+                        <div [ngbNavOutlet]="navWithIcons" class="mt-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

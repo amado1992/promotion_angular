@@ -1,0 +1,62 @@
+<form [formGroup]="_updateMovementForm" (ngSubmit)="onUpdate()" xmlns="http://www.w3.org/1999/html">
+    <div class="modal-header bg-primary">
+        <img class="icon_inventory" src="assets/images/icons/system/menu/icon_inventories.svg">
+        <h5 class="modal-title text-white pl-1" id="new-inventory-modal">Actualizar movimiento</h5>
+        <button type="button" class="close" (click)="onClose()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <div class="row">
+            <div class="col-12 form-group" *ngIf="movement.motive_movement.operation != 'ADJUSTMENT'">
+                <label for="amount">Cantidad</label>
+                <input type="number" class="form-control" id="amount"
+                    [ngClass]="{ 'is-invalid': _submitted && controls.amount.errors }" formControlName="amount">
+                <div *ngIf="_submitted && controls.amount.errors" class="invalid-feedback">
+                    <div *ngIf="controls.amount.errors.required">
+                        Cantidad es requerida
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="col-12 form-group">
+                <label for="motive_movement_id">Motivo de movimiento</label>
+                <ng-select disabled="true" id="motive_movement_id" class="form-control-select" formControlName="motive_movement_id"
+                    [ngClass]="{ 'is-invalid error': _submitted && controls.motive_movement_id.errors }">
+                    <ng-option *ngFor="let item of _motive_movements" [value]="item.id">
+                        {{item.name}}
+                    </ng-option>
+                </ng-select>
+                <div *ngIf="_submitted && controls.motive_movement_id.errors" class="invalid-feedback">
+                    <div *ngIf="controls.motive_movement_id.errors.required">
+                        Motivo de movimiento es requerida
+                    </div>
+                </div>
+            </div>-->
+
+            <div class="col-12 form-group">
+                <label for="motive">Motivo de movimiento</label>
+                <input disabled="true" type="text" class="form-control" id="motive" formControlName="motive"
+                    placeholder="Motivo de movimiento" />
+            </div>
+
+            <div class="col-12 form-group">
+                <label for="observation">Observación</label>
+                <textarea class="form-control" id="observation" rows="4"
+                    [ngClass]="{ 'is-invalid': _submitted && controls.observation.errors }"
+                    formControlName="observation">
+                </textarea>
+                <div *ngIf="_submitted && controls.observation.errors" class="invalid-feedback">
+                    <div *ngIf="controls.observation.errors.required">
+                        Observación es requerida
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success" rippleEffect>Guardar</button>
+        <button type="button" class="btn btn-secondary" (click)="onClose()" rippleEffect>Cancelar</button>
+    </div>
+</form>

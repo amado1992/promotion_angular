@@ -1,0 +1,253 @@
+<div class="content-wrapper">
+    <div class="content-body">
+        <form [formGroup]="_updateInventoryForm" (ngSubmit)="onUpdate()">
+            <section class="invoice-preview-wrapper">
+                <div class="row invoice-preview">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <img class="icon_invoice"
+                                        src="assets/images/icons/system/menu/icon_inventories_blue.svg">
+                                    <h5 class="mb-0 font-medium-5 text-primary">Editar inventario</h5>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="product_id">Producto*</label>
+                                        <ng-select placeholder="Buscar" [loading]="_loadingProduct" id="product_id"
+                                            class="form-control-select" name="product_id" formControlName="product_id"
+                                            [ngClass]="{ 'is-invalid error': _submitted && controls.product_id.errors }"
+                                            notFoundText="No se encontró." (change)="onChangeSelectedProduct($event)"
+                                            (search)="getAllProductsBySearch($event)" [readonly]="false">
+                                            <ng-option *ngFor="let item of _products" [value]="item.id">
+                                                {{item.number}} - {{item.name}}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="_submitted && controls.product_id.errors" class="invalid-feedback">
+                                            <div *ngIf="controls.product_id.errors.required">
+                                                Producto es requerido
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="material_description">Descripción del material</label>
+                                        <textarea disabled="true" name="material_description" class="form-control"
+                                            formControlName="material_description"
+                                            placeholder="Descripción del material">
+                                                                            </textarea>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="category">Cantegoría</label>
+                                        <input disabled="true" type="text" class="form-control" id="category"
+                                            formControlName="category" placeholder="Cantegoría" />
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="brand">Marca</label>
+                                        <input disabled="true" type="text" class="form-control" id="brand"
+                                            formControlName="brand" placeholder="Marca" />
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="quantity">Cantidad*</label>
+                                        <input [attr.min]="1" type="number" class="form-control" id="quantity"
+                                            [ngClass]="{ 'is-invalid': _submitted && controls.quantity.errors }"
+                                            formControlName="quantity" placeholder="Cantidad" />
+                                        <div *ngIf="_submitted && controls.quantity.errors" class="invalid-feedback">
+                                            <div *ngIf="controls.quantity.errors.required">
+                                                Cantidad es requerida
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="unit_measurements_id">Unidad de medida*</label>
+                                        <ng-select placeholder="Buscar" id="unit_measurements_id"
+                                            class="form-control-select" formControlName="unit_measurements_id"
+                                            [ngClass]="{ 'is-invalid error': _submitted && controls.unit_measurements_id.errors }">
+                                            <ng-option *ngFor="let item of _unit_measurements" [value]="item.id">
+                                                {{item.description}}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="_submitted && controls.unit_measurements_id.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="controls.unit_measurements_id.errors.required">
+                                                Unidad de medida es requerida
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="branch_offices_id">Sucursal*</label>
+                                        <ng-select placeholder="Buscar" id="branch_offices_id"
+                                            class="form-control-select" formControlName="branch_offices_id"
+                                            [ngClass]="{ 'is-invalid error': _submitted && controls.branch_offices_id.errors }"
+                                            [loading]="_loadingBranchOffices" (change)="onChangeBranchOffices($event)">
+                                            <ng-option *ngFor="let item of _branchsOffices" [value]="item.id">
+                                                {{ item.number + "-" + item.name }}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="_submitted && controls.branch_offices_id.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="controls.branch_offices_id.errors.required">
+                                                Sucursal es requerida
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="providers_id">Proveedor</label>
+                                        <ng-select placeholder="Buscar" id="providers_id" class="form-control-select"
+                                            formControlName="providers_id"
+                                            [ngClass]="{ 'is-invalid error': _submitted && controls.providers_id.errors }"
+                                            [loading]="_loadingProvider">
+                                            <ng-option *ngFor="let item of _providers" [value]="item.id">
+                                                {{item.reason_social}}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="_submitted && controls.providers_id.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="controls.providers_id.errors.required">
+                                                Proveedor es requerido
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="sale_price">Precio de venta</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div>
+                                            <input [attr.min]="0" type="number" class="form-control" id="sale_price"
+                                                [ngClass]="{ 'is-invalid': _submitted && controls.sale_price.errors }"
+                                                formControlName="sale_price" placeholder="Precio de venta" />
+                                        </div>
+                                        <div *ngIf="_submitted && controls.sale_price.errors" class="invalid-feedback">
+                                            <div *ngIf="controls.sale_price.errors.required">
+                                                Precio de venta es requerido
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="purchase_price">Precio de compra</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div>
+                                            <input [attr.min]="0" type="number" class="form-control" id="purchase_price"
+                                                [ngClass]="{ 'is-invalid': _submitted && controls.purchase_price.errors }"
+                                                formControlName="purchase_price" placeholder="Precio de compra" />
+                                        </div>
+                                        <div *ngIf="_submitted && controls.purchase_price.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="controls.purchase_price.errors.required">
+                                                Precio de compra es requerido
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="date_created">Fecha de entrada</label>
+                                        <input type="date" class="form-control" id="date_created"
+                                            formControlName="date_created"
+                                            [ngClass]="{ 'is-invalid error': _submitted && controls.date_created.errors }"
+                                            placeholder="Fecha de caducidad">
+                                        <div *ngIf="_submitted && controls.date_created.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="controls.date_created.errors.required">
+                                                Fecha de caducidad es requerida
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="physical_status">Estado físico*</label>
+                                        <ng-select placeholder="Estado físico" id="physical_status"
+                                            class="form-control-select" formControlName="physical_status"
+                                            [ngClass]="{ 'is-invalid error': _submitted && controls.physical_status.errors }"
+                                            (change)="onChangePhysicalStatus($event)">
+                                            <ng-option *ngFor="let item of physicalStatus" [value]="item.id">
+                                                {{item.name}}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="_submitted && controls.physical_status.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="controls.physical_status.errors.required">
+                                                Estado físico es requerido
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="given">Regalado</label>
+                                        <input [attr.min]="0" type="number" class="form-control" id="given"
+                                            [ngClass]="{ 'is-invalid': _submitted && controls.given.errors }"
+                                            formControlName="given" placeholder="Regalado" />
+                                        <div *ngIf="_submitted && controls.given.errors" class="invalid-feedback">
+                                            <div *ngIf="controls.given.errors.required">
+                                                Regalado es requerido
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="sold">Vendido</label>
+                                        <input [attr.min]="0" type="number" class="form-control" id="sold"
+                                            [ngClass]="{ 'is-invalid': _submitted && controls.sold.errors }"
+                                            formControlName="sold" placeholder="Vendido" />
+                                        <div *ngIf="_submitted && controls.sold.errors" class="invalid-feedback">
+                                            <div *ngIf="controls.sold.errors.required">
+                                                Vendido es requerido
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="revenues">Ingresos</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div>
+                                            <input [attr.min]="0" type="number" class="form-control" id="revenues"
+                                                [ngClass]="{ 'is-invalid': _submitted && controls.revenues.errors }"
+                                                formControlName="revenues" placeholder="Ingresos" />
+                                        </div>
+                                        <div *ngIf="_submitted && controls.revenues.errors" class="invalid-feedback">
+                                            <div *ngIf="controls.revenues.errors.required">
+                                                Ingresos es requerido
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <label for="observation">Observación</label>
+                                        <textarea name="observation" class="form-control" formControlName="observation"
+                                            placeholder="Observación"
+                                            [ngClass]="{ 'is-invalid error': _submitted && controls.observation.errors }">
+                                                    </textarea>
+                                        <div *ngIf="_submitted && controls.observation.errors" class="invalid-feedback">
+                                            <div *ngIf="controls.observation.required">
+                                                Observación es requerida
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success" rippleEffect> Guardar</button>
+                                    <button type="button" class="btn btn-secondary" (click)="onClose()" rippleEffect>
+                                        Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+@import '../@core/scss/angular/libs/toastr.component.scss';
+@import '../@core/scss/base/bootstrap-extended/include';
+// Bootstrap includes
+@import '../@core/scss/base/pages/page-auth.scss';
+
+.auth-help-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}

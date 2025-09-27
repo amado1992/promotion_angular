@@ -1,0 +1,25 @@
+.title-image {
+  justify-content: normal !important;
+}
+
+.title-image > svg {
+  margin-top: -0.4rem;
+}
+
+.title-image > h2.title-config {
+  margin-top: 8px;
+}
+
+ul#configurations > li.nav-item {
+  border: 1px solid #0065d7 !important;
+  border-radius: 8px;
+  margin-top: 5px;
+}
+
+ul.nav > li > a.active > img#general {
+  content: url("../../../../../assets/images/icons/system/configuration/icon_general.svg");
+}
+
+ul.nav > li > a.active > img#account {
+  content: url("../../../../../assets/images/icons/system/configuration/icon_accounting.svg");
+}

@@ -1,0 +1,16 @@
+@import '../@core/scss/angular/libs/select.component.scss';
+@import '../@core/scss/angular/libs/flatpickr.component.scss';
+
+.title-image {
+  justify-content: normal !important;
+}
+
+.title-image > svg {
+  margin-top: -0.4rem;
+}
+
+ul#account-settings > li.nav-item {
+  border: 1px solid #0065d7 !important;
+  border-radius: 8px;
+  margin-top: 5px;
+}

@@ -1,0 +1,1 @@
+export const IVA_MEXICO = 0.16; // 16%

@@ -1,0 +1,46 @@
+export const locale = {
+    lang: 'es',
+    data: {
+        MENU: {
+            DASHBOARD: 'Dashboard',
+            ORDERS: 'Ordenes',
+            CLIENTS: 'Clientes',
+            PRODUCTS: 'Productos',
+            BRANCHES: 'Sucursales',
+            INVENTORIES: 'Inventarios',
+            CONSIGNMENT_NOTES: 'Documentación',
+            INFORMATIONS: 'Informes',
+            INFORMATION_BLOCKS: 'Bloque de Informes',
+            PAYMENT_CREDITS: 'Crédito y Cobranza',
+            CREDIT_COUNTED: 'Créditos y Contados',
+            RECEIVABLE: 'Por Cobrar',
+            ACCOUNTS_RECEIVABLE: 'Cuentas por Cobrar',
+            COUNTED: 'Contados',
+            CREDITS: 'Créditos',
+            LIQUIDATIONS: 'Liquidaciones',
+            BANKS: 'Bancos',
+            ATTENTION_CUSTOMERS: 'Atención a Clientes',
+            REMISSIONS: 'Remisiones',
+            INVOICES: 'Facturación 4.0',
+            DEBIT_NOTES: 'Notas de Débito',
+            COMPLEMENTS: 'Complementos',
+            CREDIT_NOTES: 'Notas de Crédito',
+            CATALOGS: 'Catálogos',
+            BRANCH_OFFICES: 'Sucursales',
+            PROVIDERS: 'Proveedores',
+            OPERATORS: 'Operadores',
+            CUSTOMERS: 'Clientes',
+            PERSONS: 'Rems / Dests', // Personas
+            TRAILERS: 'Remolques',
+            TRUCKS: 'Unidades',
+            //PRODUCTS: 'Productos',
+            CATALOGUE: 'Claves SAT',
+            INVOICE_TYPE: 'Tipo Factura',
+            USERS: 'Usuarios',
+            ROLES: 'Roles',
+            CONFIGURATIONS: 'Configuraciones',
+            LOCAL_TRAVELS: 'Viajes locales',
+            FOREIGN_TRAVELS: 'Viajes foráneos'
+        }
+    }
+}

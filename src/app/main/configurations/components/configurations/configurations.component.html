@@ -1,0 +1,99 @@
+<div class="content-wrapper">
+    <div class="content-body">
+        <!-- Configuration Page -->
+        <section id="page-configuration-settings">
+            <div class="row nav-vertical d-flex">
+                <div class="col-md-3 mb-2 mb-md-0">
+                    <ul ngbNav #navVertical="ngbNav" [(activeId)]="_activeTab" id="configurations"
+                        class="nav nav-pills flex-column nav-left">
+                        <li class="nav-item" ngbNavItem="general">
+                            <a ngbNavLink
+                               class="nav-link d-flex py-75"
+                               id="configuration-pill-general"
+                               data-toggle="pill"
+                               aria-expanded="true">
+                                <img class="ico-r30"
+                                     style="margin-right: 1rem !important;"
+                                     id="general"
+                                     height="25"
+                                     src="assets/images/icons/system/configuration/icon_general_black.svg">
+                                <span class="font-weight-bold">General</span>
+                            </a>
+                            <ng-template ngbNavContent>
+                                <div class="card">
+                                    <div class="card-header title-image">
+                                        <img class="ico-r30"
+                                             height="30"
+                                             src="assets/images/icons/system/configuration/icon_general_blue.svg">
+                                        <h2 class="text-left text-primary title-config">General</h2>
+                                    </div>
+                                    <div class="card-body">
+                                        <app-configurations-general [_button_show]="_button_show"></app-configurations-general>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li class="nav-item" ngbNavItem="account">
+                            <a ngbNavLink
+                               class="nav-link d-flex py-75"
+                               id="configuration-pill-account"
+                               data-toggle="pill"
+                               aria-expanded="true">
+                                <img class="ico-r30"
+                                     style="margin-right: 1rem !important;"
+                                     id="account"
+                                     height="20"
+                                     src="assets/images/icons/system/configuration/icon_accounting_black.svg">
+                                <span class="font-weight-bold">Cuentas</span>
+                            </a>
+                            <ng-template ngbNavContent>
+                                <div class="card">
+                                    <div class="card-header title-image">
+                                        <img class="ico-r30"
+                                             height="25"
+                                             style="margin-right: 5px !important;"
+                                             src="assets/images/icons/system/configuration/icon_accounting_blue.svg">
+                                        <h2 class="text-left text-primary title-config">Cuentas</h2>
+                                    </div>
+                                    <div class="card-body">
+                                        <app-configurations-account-index [_button_show]="_button_show"></app-configurations-account-index>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </li>
+                        
+                        <li class="nav-item {{_pac_show ? '' : 'hidden'}}" ngbNavItem="pac">
+                            <a ngbNavLink
+                               class="nav-link d-flex py-75"
+                               id="configuration-pill-pac"
+                               data-toggle="pill"
+                               aria-expanded="false">
+                                <img class="ico-r30"
+                                     style="margin-right: 1rem !important;"
+                                     id="pac"
+                                     height="25"
+                                     src="assets/images/icons/system/configuration/icon_pac_black.svg">
+                                <span class="font-weight-bold">Datos del PAC</span>
+                            </a>
+                            <ng-template ngbNavContent>
+                                <div class="card">
+                                    <div class="card-header title-image">
+                                        <img class="ico-r30"
+                                             height="30"
+                                             src="assets/images/icons/system/configuration/icon_pac_blue.svg">
+                                        <h2 class="text-left text-primary title-config">Datos del PAC</h2>
+                                    </div>
+                                    <div class="card-body">
+                                        <app-configurations-pac></app-configurations-pac>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                </div>
+                <div [ngbNavOutlet]="navVertical" class="col-12 col-md-9"></div>
+            </div>
+        </section>
+        <!--/ Configuration Page -->
+    </div>
+</div>

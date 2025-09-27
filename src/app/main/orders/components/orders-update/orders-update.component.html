@@ -1,0 +1,183 @@
+<div class="content-wrapper">
+    <div class="content-body">
+        <form [formGroup]="_updateOrderForm" (ngSubmit)="onUpdate()">
+            <section class="invoice-preview-wrapper">
+                <div class="row invoice-preview">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <img class="icon_invoice"
+                                        src="assets/images/icons/system/menu/icon_ordenes_blue.svg">
+                                    <h5 class="mb-0 font-medium-5 text-primary">Editar orden</h5>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-between align-items-center border-bottom">
+                                            <h6 class="mb-1 font-medium-5 text-primary customer">Datos del cliente</h6>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-4 form-group">
+                                        <label for="customer_reason_social">Nombre completo del cliente</label>
+                                        <ng-select id="customer_reason_social" class="form-control-select"
+                                            formControlName="customer_reason_social"
+                                            [ngClass]="{ 'is-invalid error': _submitted && controls.customer_reason_social.errors }"
+                                            [loading]="_loadingCustomer" (change)="onChangeCustomer($event)"
+                                            (search)="getAllCustomers($event)" [readonly]="false">
+                                            <ng-option *ngFor="let item of _customers" [value]="item.id">
+                                                {{ item.reason_social }}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="_submitted && controls.customer_reason_social.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="controls.customer_reason_social.errors.required">
+                                                Nombre completo del cliente es requerido
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-4 form-group">
+                                        <label for="customer_email">Correo electrónico</label>
+                                        <input disabled="true" type="text" class="form-control" id="customer_email"
+                                            formControlName="customer_email" placeholder="Correo electrónico" />
+                                    </div>
+
+                                    <div class="col-12 col-md-4 col-lg-4 form-group">
+                                        <label for="cellphone">Celular</label>
+                                        <input type="text" disabled="true" class="form-control" id="cellphone"
+                                            formControlName="cellphone" placeholder="Celular" />
+                                    </div>
+
+                                    <div class="col-12 col-md-4 col-lg-4 form-group">
+                                        <label for="phone">Teléfono</label>
+                                        <input type="text" disabled="true" class="form-control" id="phone"
+                                            formControlName="phone" placeholder="Teléfono" />
+                                    </div>
+
+                                    <div class="col-12 col-md-4 col-lg-4 form-group">
+                                        <label for="address">Dirección</label>
+                                        <textarea disabled="true" name="inline_address" class="form-control"
+                                            formControlName="address" placeholder="Dirección">
+                                        </textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h6 class="mb-1 font-medium-5 border-bottom text-primary">Otros</h6>
+                                    </div>
+                                    <div class="col-12 col-md-4 form-group">
+                                        <label for="branchOfficesId">Sucursal</label>
+                                        <ng-select id="branchOfficesId" class="form-control-select"
+                                            formControlName="branchOfficesId"
+                                            [ngClass]="{ 'is-invalid error': _submitted && controls.branchOfficesId.errors }"
+                                            [loading]="_loadingBranchOffices" (change)="onChangeBranchOffices($event)">
+                                            <ng-option *ngFor="let item of _branchsOffices" [value]="item.id">
+                                                {{ item.number + "-" + item.name }}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="_submitted && controls.branchOfficesId.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="controls.branchOfficesId.errors.required">
+                                                Sucursal es requerida
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-4 col-lg-4 form-group">
+                                        <label for="observation">Observación</label>
+                                        <input type="text" class="form-control" id="observation"
+                                            [ngClass]="{ 'is-invalid': _submitted && controls.observation.errors }"
+                                            formControlName="observation" placeholder="Observación" />
+                                        <div *ngIf="_submitted && controls.observation.errors" class="invalid-feedback">
+                                            <div *ngIf="controls.observation.errors.required">
+                                                Observación es requerida
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h6 class="mb-1 font-medium-5 border-bottom text-primary">Evidencias</h6>
+                                    </div>
+                                    <!-- header media -->
+                                    <div class="media ml-1">
+                                        <div *ngIf="urlsComplete.length > 0; else defaultImage">
+                                            <img *ngFor="let url of urlsComplete; index as i;" class="rounded mr-50"
+                                                src="{{ url }}" height="76" width="80" alt="Imagen" />
+                                        </div>
+                                        <ng-template #defaultImage>
+                                            <img class="rounded mr-50"
+                                                src="assets/images/icons/system/configuration/icon_product.png"
+                                                height="76" width="80" alt="Imagen" />
+                                        </ng-template>
+                                        <!-- upload and reset button -->
+                                        <div class="media-body mt-75 ml-1">
+                                            <button type="button" for="file-upload-button"
+                                                class="btn btn-sm btn-primary mb-75 mr-75"
+                                                (click)="activatingFile(fileInput)" rippleEffect>
+                                                Subir
+                                            </button>
+
+                                            <input #fileInput type="file" multiple name="file-upload" id="file-upload"
+                                                accept="image/*" hidden (change)="onSaveFileMultiple($event)" />
+
+                                            <button type="button" class="btn btn-sm btn-outline-secondary mb-75"
+                                                (click)="onResetFile()" rippleEffect>
+                                                Reiniciar
+                                            </button>
+                                            <p>JPEG, JPG y PNG permitido. Tamaño máximo de 1 MB.</p>
+                                        </div>
+                                        <!--/ upload and reset button -->
+                                    </div>
+                                    <!--/ header media -->
+
+                                    <!-- PROGRESS -->
+                                    <div class="progress-c">
+                                        <ng-container *ngIf="_progress > 0">
+                                            <div class="progress-container">
+                                                <div class="progress progress-t0">
+                                                    <div class="progress-bar" role="progressbar"
+                                                        [style.width]="_progress+'%'" attr.aria-valuenow="{{_progress}}"
+                                                        aria-valuemin="0" aria-valuemax="100">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                    <!-- / PROGRESS -->
+                                </div>
+
+                                <app-orders-products [products]="_products" [totals]="_totals" [productIds]="productIds"
+                                    [branchOfficesId]="branchOfficesId" (newItemEvent)="addItem($event)">
+                                </app-orders-products>
+
+                                <div class="row">
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                        <h6 class="pt-0 font-medium-5 text-primary amounts">Total</h6>
+                                        <div class="bg-light-secondary text-secondary align-content-center">
+                                            <div
+                                                class="d-flex justify-content-start m-0 p-1 text-primary fw-bold font-medium-3">
+                                                <p class="m-0"> {{ this._totals[0]['_totalQuantity'] }} </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success" rippleEffect> Guardar</button>
+                                    <button type="button" class="btn btn-secondary" (click)="onClose()" rippleEffect>
+                                        Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+    </div>
+</div>

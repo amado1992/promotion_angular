@@ -1,0 +1,177 @@
+<form [formGroup]="_updateUserForm" (ngSubmit)="onUpdate()" xmlns="http://www.w3.org/1999/html">
+    <div class="modal-header bg-primary">
+        <img class="icon_user" src="assets/images/icons/system/menu/icon_user.svg">
+        <h2 class="modal-title text-white" id="update-user-modal">Editar Usuario</h2>
+        <button type="button" class="close" (click)="onClose()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <div class="row">
+            <div class="col-12 col-md-6 form-group">
+                <label for="user_name">Nombre</label>
+                <input type="text"
+                       class="form-control"
+                       id="user_name"
+                       [ngClass]="{ 'is-invalid': _submitted && controls.user_name.errors }"
+                       formControlName="user_name"
+                       placeholder="Nombre"/>
+                <div *ngIf="_submitted && controls.user_name.errors" class="invalid-feedback">
+                    <div *ngIf="controls.user_name.errors.required"> Nombre es requerido</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 form-group">
+                <label for="user_last_name">Apellidos</label>
+                <input type="text"
+                       class="form-control"
+                       id="user_last_name"
+                       [ngClass]="{ 'is-invalid': _submitted && controls.user_last_name.errors }"
+                       formControlName="user_last_name"
+                       placeholder="Apellidos"/>
+                <div *ngIf="_submitted && controls.user_last_name.errors" class="invalid-feedback">
+                    <div *ngIf="controls.user_last_name.errors.required"> Apellidos es requerido</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 form-group">
+                <label for="user_email">Correo Electrónico</label>
+                <input type="text"
+                       class="form-control"
+                       id="user_email"
+                       [ngClass]="{ 'is-invalid': _submitted && controls.user_email.errors }"
+                       formControlName="user_email"
+                       placeholder="Correo Electrónico"/>
+                <div *ngIf="_submitted && controls.user_email.errors" class="invalid-feedback">
+                    <div *ngIf="controls.user_email.errors.required">
+                        Correo Electrónico es requerido
+                    </div>
+                    <div *ngIf="controls.user_email.errors.email">
+                        El correo debe ser una dirección de correo electrónico válida
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 form-group">
+                <label for="user_phone">Celular</label>
+                <div class="input-group input-group-merge"
+                     [ngClass]="{ 'is-invalid': _submitted && controls.user_phone.errors }">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"
+                              id="user_area-phone">
+                            + 52
+                        </span>
+                    </div>
+                    <input type="text"
+                           class="form-control"
+                           id="user_phone"
+                           mask="00 0000 0000"
+                           [ngClass]="{ 'is-invalid': _submitted && controls.user_phone.errors }"
+                           formControlName="user_phone"
+                           placeholder="Celular"/>
+                </div>
+                <div *ngIf="_submitted && controls.user_phone.errors" class="invalid-feedback"
+                     [ngClass]="{ 'd-block': _submitted && controls.user_phone.errors }">
+                    <div *ngIf="controls.user_phone.errors.required"> Celular es requerido</div>
+                    <div *ngIf="controls.user_phone.errors.mask"> El formato del celular no es válido</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 form-group">
+                <label for="user_password">Contraseña</label>
+                <div class="input-group input-group-merge form-password-toggle">
+                    <input [type]="_passwordTextType ? 'text' : 'password'"
+                           class="form-control form-control-merge"
+                           id="user_password"
+                           [ngClass]="{ 'is-invalid error': _submitted && controls.user_password.errors }"
+                           formControlName="user_password"
+                           placeholder="Contraseña"/>
+                    <div class="input-group-append">
+                        <span class="input-group-text cursor-pointer">
+                            <i class="feather font-small-4"
+                               [ngClass]="{
+                                  'icon-eye-off': _passwordTextType,
+                                  'icon-eye': !_passwordTextType
+                                }"
+                               (click)="togglePasswordTextType()">
+                            </i>
+                        </span>
+                    </div>
+                </div>
+                <div *ngIf="_submitted && controls.user_password.errors"
+                     class="invalid-feedback"
+                     [ngClass]="{ 'd-block': _submitted && controls.user_password.errors }">
+                    <div *ngIf="controls.user_password.errors.required"> Contraseña es requerida</div>
+                    <div *ngIf="controls.user_password.errors.minlength">
+                        La contraseña debe tener al menos {{controls.user_password.errors.minlength.requiredLength}}
+                        caracteres
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 form-group">
+                <label for="user_password_confirmation">Confirmación de contraseña</label>
+                <div class="input-group input-group-merge form-password-toggle">
+                    <input [type]="_passwordTextType ? 'text' : 'password'"
+                           class="form-control form-control-merge"
+                           id="user_password_confirmation"
+                           [ngClass]="{ 'is-invalid error': _submitted && controls.user_password_confirmation.errors }"
+                           formControlName="user_password_confirmation"
+                           placeholder="Confirmación de contraseña"/>
+                    <div class="input-group-append">
+                        <span class="input-group-text cursor-pointer">
+                            <i class="feather font-small-4"
+                               [ngClass]="{
+                                  'icon-eye-off': _passwordTextType,
+                                  'icon-eye': !_passwordTextType
+                                }"
+                               (click)="togglePasswordTextType()">
+                            </i>
+                        </span>
+                    </div>
+                </div>
+                <div *ngIf="_submitted && controls.user_password_confirmation.errors"
+                     class="invalid-feedback"
+                     [ngClass]="{ 'd-block': _submitted && controls.user_password_confirmation.errors }">
+                    <div *ngIf="controls.user_password_confirmation.errors.required">
+                        Confirmación de contraseña es requerida
+                    </div>
+                    <div *ngIf="controls.user_password_confirmation.errors.minlength">
+                        La confirmación de contraseña debe tener al
+                        menos {{controls.user_password_confirmation.errors.minlength.requiredLength}} caracteres
+                    </div>
+                    <div *ngIf="controls.user_password_confirmation.errors.matchPassword">
+                        La confirmación de la contraseña no coincide
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 form-group">
+                <label for="user_role">Rol</label>
+                <ng-select id="user_role"
+                           class="form-control-select"
+                           formControlName="user_role"
+                           [ngClass]="{ 'is-invalid error': _submitted && controls.user_role.errors }">
+                    <ng-option value="" disabled selected>Rol</ng-option>
+                    <ng-option *ngFor="let item of _roles" [value]="item.id">{{item.name}}</ng-option>
+                </ng-select>
+                <div *ngIf="_submitted && controls.user_role.errors" class="invalid-feedback">
+                    <div *ngIf="controls.user_role.errors.required"> Rol es requerido</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 form-group {{ !_branch_office_show ? 'hidden' : '' }}">
+                <label for="user_branch_office">Sucursal</label>
+                <ng-select id="user_branch_office"
+                           class="form-control-select"
+                           formControlName="user_branch_office"
+                           [ngClass]="{ 'is-invalid error': _submitted && controls.user_branch_office.errors }">
+                    <ng-option value="" disabled selected>Sucursal</ng-option>
+                    <ng-option *ngFor="let item of _branch_offices" [value]="item.id">
+                        {{item.name}}
+                    </ng-option>
+                </ng-select>
+                <div *ngIf="_submitted && controls.user_branch_office.errors" class="invalid-feedback">
+                    <div *ngIf="controls.user_branch_office.errors.required"> Sucursal es requerida</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success" rippleEffect>Guardar</button>
+        <button type="button" class="btn btn-secondary" (click)="onClose()" rippleEffect> Cancelar</button>
+    </div>
+</form>

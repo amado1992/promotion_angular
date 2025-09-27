@@ -1,0 +1,170 @@
+<div class="content-wrapper">
+    <div class="content-body">
+        <!-- Product List Start -->
+        <section class="users-list-wrapper">
+            <!-- Products Filter Start -->
+            <div class="card">
+                <form [formGroup]="_filterForm" (ngSubmit)="onFilterAll()">
+                    <h5 class="card-header">
+                        <div class="d-flex align-items-center">Filtro de Búsqueda</div>
+                        <div class="d-flex align-items-center heading-elements">
+                            <a (click)="onCollapse()" data-action="collapse" tooltipClass="fadeInAnimation"
+                                placement="top" ngbTooltip="{{(_collapseStatus ? 'Mostrar' : 'Cerrar')}}"
+                                [ngClass]="{ rotate: _collapseStatus }" [attr.aria-expanded]="_collapseStatus">
+                                <i class="feather icon-chevron-up d-sm-block d-none font-medium-2 mr-1"></i>
+                            </a>
+                            <a (click)="onFilterAll()" tooltipClass="fadeInAnimation" placement="top"
+                                ngbTooltip="Filtrar">
+                                <i data-feather="search"
+                                    class="cursor-pointer d-sm-block d-none font-medium-2 mr-1"></i>
+                            </a>
+                            <a (click)="onClean()" tooltipClass="fadeInAnimation" placement="top" ngbTooltip="Limpiar">
+                                <i data-feather="droplet" class="cursor-pointer d-sm-block d-none font-medium-2"></i>
+                            </a>
+                        </div>
+                    </h5>
+                    <div class="card-body" [ngbCollapse]="_collapseStatus">
+                        <div class="users-list-filter">
+                            <div class="row">
+                                <div class="col-12 col-md-2">
+                                    <fieldset class="form-group">
+                                        <input type="text" class="form-control" id="number" formControlName="number"
+                                            placeholder="Número" />
+                                    </fieldset>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <fieldset class="form-group">
+                                        <input type="text" class="form-control" id="description"
+                                            formControlName="description" placeholder="Descripción" />
+                                    </fieldset>
+                                </div>
+                                <div class="col-12 col-md-2">
+                                    <fieldset class="form-group">
+                                        <ng-select id="category" class="form-control-select" formControlName="category">
+                                            <ng-option value="" disabled selected>Categoría</ng-option>
+                                            <ng-option *ngFor="let item of _categories" [value]="item.id">
+                                                {{item.name}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <button type="submit" class="hidden"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Products Filter End -->
+
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <div class="d-flex justify-content-between align-items-center m-1">
+                            <label class="d-flex align-items-center">Mostrar
+                                <select class="form-control mx-25" [(ngModel)]="_pageModel.limit"
+                                    (ngModelChange)="onChangeLimit($event)">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                entradas
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12 d-flex justify-content-start justify-content-md-end">
+                        <div class="d-flex align-items-center"
+                            [ngClass]="this._permissions_values.create ? 'ml-1 ml-md-0' : 'pr-1 pb-1 pb-md-0'">
+                            <form [formGroup]="_filterSearch">
+                                <input type="text" class="form-control ml-25" formControlName="search"
+                                    spellcheck="false" placeholder="Buscar"
+                                    (keyup)="onSearchFilter()" />
+                            </form>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-end pr-1 pb-1 pb-md-0"
+                            *appPermission="_permissions.create">
+                            <button type="button" class="btn btn-primary ml-1" rippleEffect
+                                (click)="onModalNewProductOpen()">
+                                <i data-feather="plus" class="d-sm-none d-inline-block mr-0 mr-sm-1"></i>
+                                <span class="d-none d-sm-inline-block">Nuevo Producto</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <ngx-datatable class="bootstrap core-bootstrap" [rows]="rows" [columnMode]="ColumnMode.force"
+                    [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [scrollbarH]="true"
+                    [externalPaging]="true" [externalSorting]="true" [loadingIndicator]="true"
+                    [count]="_pageModel.count" [offset]="_pageModel.offset" [limit]="_pageModel.limit"
+                    [sortType]="SortType.single" (page)="onPageCallback($event)" (sort)="onSortCallback($event)">
+
+                    <ngx-datatable-column [width]="25" [sortable]="false">
+                        <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                            <div class="d-flex align-items-center">
+                                <div class="media ml-1">
+                                    <div *ngIf="row.url_complete != '' && row.url_complete != undefined; else defaultImage">
+                                        <img class="rounded mr-50" src="{{ row.url_complete }}" height="50" width="50"
+                                            alt="Imagen" />
+                                    </div>
+                                    <ng-template #defaultImage>
+                                        <img class="rounded mr-50"
+                                            src="assets/images/icons/system/configuration/icon_product.png" height="50"
+                                            width="50" alt="Imagen" />
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Folio" [width]="25" [sortable]="false">
+                        <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                            <div class="align-items-center">
+                                {{ row.number }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Nombre" [width]="25" [sortable]="false">
+                        <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                            <div class="align-items-center">
+                                {{ row.name}}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Descripción" [width]="25" [sortable]="false">
+                        <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                            <div class="align-items-center">
+                                {{ row.description }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Categoría" prop="category" [width]="25" [sortable]="false">
+                        <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                            <div class="align-items-center">
+                                {{ row.category?.name }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ng-container *ngIf="this._permissions_values.update || this._permissions_values.destroy">
+                        <ngx-datatable-column name="Acciones" [width]="25" [sortable]="false">
+                            <ng-template ngx-datatable-cell-template let-row="row">
+                                <a (click)="onModalUpdateProductOpen($event, row)" class="text-primary"
+                                    tooltipClass="fadeInAnimation" placement="left-bottom" ngbTooltip="Editar"
+                                    *appPermission="_permissions.update">
+                                    <span [data-feather]="'edit'" [size]="16" [class]="'mr-50'"></span>
+                                </a>
+                                <a (click)="onDestroy(row)" class="text-danger" tooltipClass="fadeInAnimation"
+                                    placement="left-bottom" ngbTooltip="Eliminar" *appPermission="_permissions.destroy">
+                                    <span [data-feather]="'trash-2'" [size]="16" [class]="'mr-50'"></span>
+                                </a>
+                            </ng-template>
+                        </ngx-datatable-column>
+                    </ng-container>
+                </ngx-datatable>
+            </div>
+        </section>
+        <!-- Product List End -->
+    </div>
+</div>

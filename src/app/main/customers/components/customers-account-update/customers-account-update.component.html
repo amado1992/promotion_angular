@@ -1,0 +1,57 @@
+<form [formGroup]="_updateAccountForm" (ngSubmit)="onUpdate()" xmlns="http://www.w3.org/1999/html">
+    <div class="modal-header bg-primary">
+        <img class="icon_account" src="assets/images/icons/system/configuration/icon_accounting.svg">
+        <h2 class="modal-title text-white" id="new-account-modal">Editar Cuenta del Cliente</h2>
+        <button type="button" class="close" (click)="onClose()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <div class="row">
+            <div class="col-12 form-group text-danger text-justify" *ngIf="!customerAccount.deleted">
+                Esta cuenta se encuentra asociada, cualquier cambio que se realice se vera reflejado en el banco.
+            </div>
+            <div class="col-12 form-group">
+                <label for="bank_name">Nombre del Banco</label>
+                <input type="text"
+                       class="form-control"
+                       id="bank_name"
+                       [ngClass]="{ 'is-invalid': _submitted && controls.bank_name.errors }"
+                       formControlName="bank_name"
+                       placeholder="Nombre del Banco"/>
+                <div *ngIf="_submitted && controls.bank_name.errors" class="invalid-feedback">
+                    <div *ngIf="controls.bank_name.errors.required"> Nombre del Banco es requerido</div>
+                </div>
+            </div>
+            <div class="col-12 form-group">
+                <label for="bank_rfc">RFC del Banco</label>
+                <input type="text"
+                       class="form-control"
+                       id="bank_rfc"
+                       [ngClass]="{ 'is-invalid': _submitted && controls.bank_rfc.errors }"
+                       formControlName="bank_rfc"
+                       placeholder="RFC del Banco"/>
+                <div *ngIf="_submitted && controls.bank_rfc.errors" class="invalid-feedback">
+                    <div *ngIf="controls.bank_rfc.errors.required"> RFC del Banco es requerido</div>
+                </div>
+            </div>
+            <div class="col-12 form-group">
+                <label for="number_account">Número de Cuenta</label>
+                <input type="text"
+                       class="form-control"
+                       id="number_account"
+                       [ngClass]="{ 'is-invalid': _submitted && controls.number_account.errors }"
+                       formControlName="number_account"
+                       placeholder="Número de Cuenta"/>
+                <div *ngIf="_submitted && controls.number_account.errors" class="invalid-feedback">
+                    <div *ngIf="controls.number_account.errors.required"> Número de Cuenta es requerido</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success" rippleEffect> Guardar</button>
+        <button type="button" class="btn btn-secondary" (click)="onClose()" rippleEffect> Cancelar</button>
+    </div>
+</form>

@@ -1,0 +1,348 @@
+<div class="content-wrapper">
+    <div class="content-body">
+        <!-- account setting page -->
+        <section id="page-account-settings">
+            <div class="row nav-vertical d-flex">
+                <div class="col-md-3 mb-2 mb-md-0">
+                    <ul ngbNav #navVertical="ngbNav" [(activeId)]="_activeTab" id="account-settings"
+                        class="nav nav-pills flex-column nav-left">
+                        <li class="nav-item" ngbNavItem="account">
+                            <a ngbNavLink
+                               class="nav-link d-flex py-75"
+                               id="account-pill-account"
+                               data-toggle="pill"
+                               aria-expanded="true">
+                                <i data-feather="user" class="font-medium-3 mr-1"></i>
+                                <span class="font-weight-bold">Mi Perfil</span>
+                            </a>
+                            <ng-template ngbNavContent>
+                                <div class="card">
+                                    <div class="card-header title-image">
+                                        <i data-feather="user" class="font-medium-5 text-primary mr-1"></i>
+                                        <h2 class="text-left text-primary">Mi Perfil</h2>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- header media -->
+                                        <div class="media">
+                                            <div *ngIf="avatar !== ''; else accountAvatar">
+                                                <img class="rounded mr-50"
+                                                     src="{{ avatar }}"
+                                                     height="76"
+                                                     width="80"
+                                                     alt="Imagen"/>
+                                            </div>
+                                            <ng-template #accountAvatar>
+                                                <div class="rounded mr-50"
+                                                     [ngClass]="{
+                                                        'bg-light-success': currentUser.status == 'Activo',
+                                                        'bg-light-danger': currentUser.status == 'Inactivo',
+                                                        'bg-light-warning': currentUser.status == 'Pendiente'
+                                                     }">
+                                                    <div class="avatar-content m-2 text-center">
+                                                        {{ currentUser.name + ' ' + currentUser.last_name | initials | uppercase }}
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+                                            <!-- upload and reset button -->
+                                            <div class="media-body mt-75 ml-1">
+                                                <button for="account-upload"
+                                                        class="btn btn-sm btn-primary mb-75 mr-75"
+                                                        (click)="activatingFile($event)"
+                                                        rippleEffect>
+                                                    Subir
+                                                </button>
+                                                <input type="file"
+                                                       name="account-upload"
+                                                       id="account-upload"
+                                                       accept="image/*"
+                                                       hidden
+                                                       (change)="onSaveAvatar($event)"/>
+                                                <button class="btn btn-sm btn-outline-secondary mb-75"
+                                                        (click)="onResetAvatar()"
+                                                        rippleEffect>
+                                                    Reiniciar
+                                                </button>
+                                                <p>JPG o PNG permitido. Tamaño máximo de 1 MB.</p>
+                                            </div>
+                                            <!--/ upload and reset button -->
+                                        </div>
+                                        <!--/ header media -->
+
+                                        <!-- PROGRESS -->
+                                        <div class="progress-c">
+                                            <ng-container *ngIf="_progress > 0">
+                                                <div class="progress-container">
+                                                    <div class="progress progress-t0">
+                                                        <div class="progress-bar" role="progressbar"
+                                                             [style.width]="_progress+'%'"
+                                                             attr.aria-valuenow="{{_progress}}" aria-valuemin="0"
+                                                             aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <!-- / PROGRESS -->
+
+                                        <!-- form -->
+                                        <form class="validate-form mt-2" [formGroup]="_accountUserForm" (ngSubmit)="onSave()">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-6 form-group">
+                                                    <label for="name">Nombre</label>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="name"
+                                                           [ngClass]="{ 'is-invalid error': _submittedGeneral && controls.name.errors }"
+                                                           formControlName="name"
+                                                           placeholder="Nombre"/>
+                                                    <div *ngIf="_submittedGeneral && controls.name.errors"
+                                                         class="invalid-feedback">
+                                                        <div *ngIf="controls.name.errors.required">
+                                                            Nombre es requerido
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-sm-6 form-group">
+                                                    <label for="last_name">Apellidos</label>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="last_name"
+                                                           [ngClass]="{ 'is-invalid error': _submittedGeneral && controls.last_name.errors }"
+                                                           formControlName="last_name"
+                                                           placeholder="Apellidos"/>
+                                                    <div *ngIf="_submittedGeneral && controls.last_name.errors"
+                                                         class="invalid-feedback">
+                                                        <div *ngIf="controls.last_name.errors.required">
+                                                            Apellidos es requerido
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-sm-6 form-group">
+                                                    <label for="email">Correo Electrónico</label>
+                                                    <input type="email"
+                                                           class="form-control"
+                                                           id="email"
+                                                           [ngClass]="{ 'is-invalid error': _submittedGeneral && controls.email.errors }"
+                                                           formControlName="email"
+                                                           placeholder="Correo Electrónico"/>
+                                                    <div *ngIf="_submittedGeneral && controls.email.errors"
+                                                         class="invalid-feedback">
+                                                        <div *ngIf="controls.email.errors.required">
+                                                            Correo Electrónico es requerido
+                                                        </div>
+                                                        <div *ngIf="controls.email.errors.email">
+                                                            El correo debe ser una dirección de correo electrónico
+                                                            válida
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-sm-6 form-group">
+                                                    <label for="phone">Celular</label>
+                                                    <div class="input-group input-group-merge"
+                                                         [ngClass]="{ 'is-invalid error': _submittedGeneral && controls.phone.errors }">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"
+                                                                  id="area-phone">
+                                                                + 52
+                                                            </span>
+                                                        </div>
+                                                        <input type="text"
+                                                               class="form-control"
+                                                               id="phone"
+                                                               mask="00 0000 0000"
+                                                               [ngClass]="{ 'is-invalid error': _submittedGeneral && controls.phone.errors }"
+                                                               formControlName="phone"
+                                                               placeholder="Celular"/>
+                                                    </div>
+                                                    <div *ngIf="_submittedGeneral && controls.phone.errors"
+                                                         class="invalid-feedback"
+                                                         [ngClass]="{ 'd-block': _submittedGeneral && controls.phone.errors }">
+                                                        <div *ngIf="controls.phone.errors.required">
+                                                            Celular es requerido
+                                                        </div>
+                                                        <div *ngIf="controls.phone.errors.mask">
+                                                            El formato del celular no es válido
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <ng-container *ngIf="_branch_office_show">
+                                                    <div class="col-12 col-sm-6 form-group">
+                                                        <label for="branch_office">Sucursal</label>
+                                                        <input type="text"
+                                                               class="form-control"
+                                                               id="branch_office"
+                                                               formControlName="branch_office"
+                                                               placeholder="Sucursal"/>
+                                                    </div>
+                                                </ng-container>
+                                                <div class="col-12 text-right">
+                                                    <button type="submit"
+                                                            class="btn btn-success mt-2 mr-1"
+                                                            rippleEffect> Guardar
+                                                    </button>
+                                                    <button type="button"
+                                                            class="btn btn-secondary mt-2"
+                                                            (click)="onCleanForm()"
+                                                            rippleEffect> Cancelar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <!--/ form -->
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li class="nav-item" ngbNavItem="password">
+                            <a ngbNavLink
+                               class="nav-link d-flex py-75"
+                               id="account-pill-password"
+                               data-toggle="pill"
+                               aria-expanded="false">
+                                <i data-feather="lock" class="font-medium-3 mr-1"></i>
+                                <span class="font-weight-bold">Cambiar Contraseña</span>
+                            </a>
+                            <ng-template ngbNavContent>
+                                <div class="card">
+                                    <div class="card-header title-image">
+                                        <i data-feather="lock" class="font-medium-5 text-primary mr-1"></i>
+                                        <h2 class="text-left text-primary">Cambiar contraseña</h2>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- form -->
+                                        <form class="validate-form"
+                                              [formGroup]="_accountUserPasswordForm"
+                                              (ngSubmit)="onSavePassword()">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-6 form-group">
+                                                    <label for="account-old-password">Contraseña Vieja</label>
+                                                    <div class="input-group form-password-toggle input-group-merge">
+                                                        <input [type]="_passwordTextTypeOld ? 'text' : 'password'"
+                                                               class="form-control"
+                                                               id="account-old-password"
+                                                               [ngClass]="{ 'is-invalid error': _submittedPassword && controlsPassword.old_password.errors }"
+                                                               formControlName="old_password"
+                                                               placeholder="Contraseña Vieja"/>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text cursor-pointer">
+                                                                <i class="feather font-small-4"
+                                                                   [ngClass]="{
+                                                                      'icon-eye-off': _passwordTextTypeOld,
+                                                                      'icon-eye': !_passwordTextTypeOld
+                                                                    }"
+                                                                   (click)="togglePasswordTextTypeOld()">
+                                                                </i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div *ngIf="_submittedPassword && controlsPassword.old_password.errors"
+                                                         class="invalid-feedback"
+                                                         [ngClass]="{ 'd-block': _submittedPassword && controlsPassword.old_password.errors }">
+                                                        <div *ngIf="controlsPassword.old_password.errors.required">
+                                                            Contraseña Vieja es requerida
+                                                        </div>
+                                                        <div *ngIf="controlsPassword.old_password.errors.minlength">
+                                                            La contraseña vieja debe tener al
+                                                            menos {{controlsPassword.old_password.errors.minlength.requiredLength}}
+                                                            caracteres
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 col-sm-6 form-group">
+                                                    <label for="account-new-password">Contraseña Nueva</label>
+                                                    <div class="input-group form-password-toggle input-group-merge">
+                                                        <input [type]="_passwordTextTypeNew ? 'text' : 'password'"
+                                                               class="form-control"
+                                                               id="account-new-password"
+                                                               [ngClass]="{ 'is-invalid error': _submittedPassword && controlsPassword.password.errors }"
+                                                               formControlName="password"
+                                                               placeholder="Contraseña Nueva"/>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text cursor-pointer">
+                                                                <i class="feather font-small-4"
+                                                                   [ngClass]="{
+                                                                      'icon-eye-off': _passwordTextTypeNew,
+                                                                      'icon-eye': !_passwordTextTypeNew
+                                                                   }"
+                                                                   (click)="togglePasswordTextTypeNew()">
+                                                                </i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div *ngIf="_submittedPassword && controlsPassword.password.errors"
+                                                         class="invalid-feedback"
+                                                         [ngClass]="{ 'd-block': _submittedPassword && controlsPassword.password.errors }">
+                                                        <div *ngIf="controlsPassword.password.errors.required">
+                                                            Contraseña Nueva es requerida
+                                                        </div>
+                                                        <div *ngIf="controlsPassword.password.errors.minlength">
+                                                            La contraseña nueva debe tener al
+                                                            menos {{controlsPassword.password.errors.minlength.requiredLength}}
+                                                            caracteres'
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-sm-6 form-group">
+                                                    <label for="account-new-password-confirmation">Confirmación de Contraseña Nueva</label>
+                                                    <div class="input-group form-password-toggle input-group-merge">
+                                                        <input [type]="_passwordTextTypeNew ? 'text' : 'password'"
+                                                               class="form-control"
+                                                               id="account-new-password-confirmation"
+                                                               [ngClass]="{ 'is-invalid error': _submittedPassword && controlsPassword.password_confirmation.errors }"
+                                                               formControlName="password_confirmation"
+                                                               placeholder="Confirmación de Contraseña Nueva"/>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text cursor-pointer">
+                                                                <i class="feather font-small-4"
+                                                                   [ngClass]="{
+                                                                      'icon-eye-off': _passwordTextTypeNew,
+                                                                      'icon-eye': !_passwordTextTypeNew
+                                                                   }"
+                                                                   (click)="togglePasswordTextTypeNew()"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div *ngIf="_submittedPassword && controlsPassword.password_confirmation.errors"
+                                                         class="invalid-feedback"
+                                                         [ngClass]="{ 'd-block': _submittedPassword && controlsPassword.password_confirmation.errors }">
+                                                        <div *ngIf="controlsPassword.password_confirmation.errors.required">
+                                                            Confirmación de Contraseña Nueva es requerida
+                                                        </div>
+                                                        <div *ngIf="controlsPassword.password_confirmation.errors.minlength">
+                                                            La confirmación de contraseña nueva debe tener al
+                                                            menos {{controlsPassword.password_confirmation.errors.minlength.requiredLength}}
+                                                            caracteres
+                                                        </div>
+                                                        <div *ngIf="controlsPassword.password_confirmation.errors.matchPassword">
+                                                            La confirmación de la contraseña nueva no coincide
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 text-right">
+                                                    <button type="submit"
+                                                            class="btn btn-success mr-1 mt-1"
+                                                            rippleEffect> Guardar
+                                                    </button>
+                                                    <button type="button"
+                                                            class="btn btn-secondary mt-1"
+                                                            (click)="onCleanPasswordForm()"
+                                                            rippleEffect> Cancelar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <!--/ form -->
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                </div>
+                <div [ngbNavOutlet]="navVertical" class="col-12 col-md-9"></div>
+            </div>
+        </section>
+        <!--/ account setting page -->
+    </div>
+</div>

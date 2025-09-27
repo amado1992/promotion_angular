@@ -1,0 +1,14 @@
+<!-- Footer -->
+<p class="clearfix mb-0">
+  <span class="float-md-left d-block d-md-inline-block mt-25">
+    Copyright &copy; {{ year }} {{ this.coreConfig.app.appName }}
+    <span class="d-none d-sm-inline-block"> / Desarrollado por<a class="ml-25" href="https://dosbytes.com.mx" target="_blank">dosbytes.com.mx</a></span>
+  </span>
+  <span class="float-md-right d-none d-md-block">
+    Hecho con<span [data-feather]="'heart'" [class]="'pink'"></span> &nbsp;para México
+  </span>
+</p>
+<!--/ Footer -->
+
+<!-- Move to top Button-->
+<app-scroll-top *ngIf="coreConfig.layout.scrollTop"></app-scroll-top>

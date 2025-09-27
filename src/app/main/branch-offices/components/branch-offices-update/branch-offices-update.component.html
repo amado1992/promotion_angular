@@ -1,0 +1,233 @@
+<form [formGroup]="_updateBranchOfficeForm" (ngSubmit)="onUpdate()" xmlns="http://www.w3.org/1999/html">
+    <div class="modal-header bg-primary">
+        <img class="icon_branch_office" src="assets/images/icons/system/menu/icon_branch_office.svg">
+        <h2 class="modal-title text-white" id="update-branch-office-modal">Editar Sucursal</h2>
+        <button type="button" class="close" (click)="onClose()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <div class="row">
+            <div class="col-12 col-md-6 form-group">
+                <label for="branch_office_name">Nombre</label>
+                <input type="text"
+                       class="form-control"
+                       id="branch_office_name"
+                       [ngClass]="{ 'is-invalid': _submitted && controls.branch_office_name.errors }"
+                       formControlName="branch_office_name"
+                       placeholder="Nombre"/>
+                <div *ngIf="_submitted && controls.branch_office_name.errors" class="invalid-feedback">
+                    <div *ngIf="controls.branch_office_name.errors.required"> Nombre es requerido</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 form-group">
+                <label for="branch_office_serial">Serie</label>
+                <input type="text"
+                       class="form-control"
+                       id="branch_office_serial"
+                       [ngClass]="{ 'is-invalid': _submitted && controls.branch_office_serial.errors }"
+                       formControlName="branch_office_serial"
+                       placeholder="Serie"/>
+                <div *ngIf="_submitted && controls.branch_office_serial.errors" class="invalid-feedback">
+                    <div *ngIf="controls.branch_office_serial.errors.required"> Serie es requerida</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 form-group">
+                <label for="branch_office_email">Correo Electrónico</label>
+                <input type="text"
+                       class="form-control"
+                       id="branch_office_email"
+                       [ngClass]="{ 'is-invalid': _submitted && controls.branch_office_email.errors }"
+                       formControlName="branch_office_email"
+                       placeholder="Correo Electrónico"/>
+                <div *ngIf="_submitted && controls.branch_office_email.errors" class="invalid-feedback">
+                    <div *ngIf="controls.branch_office_email.errors.required">
+                        Correo Electrónico es requerido
+                    </div>
+                    <div *ngIf="controls.branch_office_email.errors.email">
+                        El correo debe ser una dirección de correo electrónico válida
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 form-group">
+                <label for="branch_office_phone">Teléfono</label>
+                <div class="input-group input-group-merge"
+                     [ngClass]="{ 'is-invalid error': _submitted && controls.branch_office_phone.errors }">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"
+                              id="branch_office_area_phone">
+                            + {{_area}}
+                        </span>
+                    </div>
+                    <input type="text"
+                           class="form-control"
+                           id="branch_office_phone"
+                           mask="00 0000 0000"
+                           [ngClass]="{ 'is-invalid error': _submitted && controls.branch_office_phone.errors }"
+                           formControlName="branch_office_phone"
+                           placeholder="Teléfono"/>
+                </div>
+                <div *ngIf="_submitted && controls.branch_office_phone.errors" class="invalid-feedback"
+                     [ngClass]="{ 'd-block': _submitted && controls.branch_office_phone.errors }">
+                    <div *ngIf="controls.branch_office_phone.errors.required"> Celular es requerido</div>
+                    <div *ngIf="controls.branch_office_phone.errors.mask"> El formato del celular no es válido</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 form-group">
+                <label for="branch_office_whatsapp">Whatsapp</label>
+                <div class="input-group input-group-merge"
+                     [ngClass]="{ 'is-invalid error': _submitted && controls.branch_office_whatsapp.errors }">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"
+                              id="branch_office_area_phone_whatsapp">
+                            + {{_area}}
+                        </span>
+                    </div>
+                    <input type="text"
+                           class="form-control"
+                           id="branch_office_whatsapp"
+                           mask="00 0000 0000"
+                           [ngClass]="{ 'is-invalid error': _submitted && controls.branch_office_whatsapp.errors }"
+                           formControlName="branch_office_whatsapp"
+                           placeholder="Whatsapp"/>
+                </div>
+                <div *ngIf="_submitted && controls.branch_office_whatsapp.errors"
+                     class="invalid-feedback"
+                     [ngClass]="{ 'd-block': _submitted && controls.branch_office_whatsapp.errors }">
+                    <div *ngIf="controls.branch_office_whatsapp.errors.required"> Whatsapp es requerido</div>
+                    <div *ngIf="controls.branch_office_whatsapp.errors.mask"> El formato del whatsapp no es válido</div>
+                </div>
+            </div>
+            <div class="col-12 pb-1">
+                <h6 class="mb-0 font-medium-5 border-bottom text-primary">Dirección Fiscal</h6>
+            </div>
+            <div class="col-12 col-md-4 form-group">
+                <label for="branch_office_street">Calle</label>
+                <input type="text"
+                       class="form-control"
+                       id="branch_office_street"
+                       [ngClass]="{ 'is-invalid error': _submitted && controls.branch_office_street.errors }"
+                       formControlName="branch_office_street"
+                       placeholder="Calle"/>
+                <div *ngIf="_submitted && controls.branch_office_street.errors"
+                     class="invalid-feedback">
+                    <div *ngIf="controls.branch_office_street.errors.required"> Calle es requerida</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 form-group">
+                <label for="branch_office_exterior_number">Nro Exterior</label>
+                <input type="text"
+                       class="form-control"
+                       id="branch_office_exterior_number"
+                       [ngClass]="{ 'is-invalid error': _submitted && controls.branch_office_exterior_number.errors }"
+                       formControlName="branch_office_exterior_number"
+                       placeholder="Nro Exterior"/>
+                <div *ngIf="_submitted && controls.branch_office_exterior_number.errors"
+                     class="invalid-feedback">
+                    <div *ngIf="controls.branch_office_exterior_number.errors.required"> Nro Exterior es requerido</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 form-group">
+                <label for="branch_office_interior_number">Nro Interior</label>
+                <input type="text"
+                       class="form-control"
+                       id="branch_office_interior_number"
+                       [ngClass]="{ 'is-invalid error': _submitted && controls.branch_office_interior_number.errors }"
+                       formControlName="branch_office_interior_number"
+                       placeholder="Nro Interior"/>
+                <div *ngIf="_submitted && controls.branch_office_interior_number.errors"
+                     class="invalid-feedback">
+                    <div *ngIf="controls.branch_office_interior_number.errors.required"> Nro Interior es requerido</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 form-group">
+                <label for="branch_office_postal_code">Código Postal</label>
+                <input type="text"
+                       class="form-control"
+                       id="branch_office_postal_code"
+                       mask="00000"
+                       [ngClass]="{ 'is-invalid': _submitted && controls.branch_office_postal_code.errors }"
+                       formControlName="branch_office_postal_code"
+                       placeholder="Código Postal"
+                       (ngModelChange)="onChangePostalCode($event)"/>
+                <div *ngIf="_submitted && controls.branch_office_postal_code.errors" class="invalid-feedback">
+                    <div *ngIf="controls.branch_office_postal_code.errors.required"> Código Postal es requerido</div>
+                    <div *ngIf="controls.branch_office_postal_code.errors.mask"> El formato del código postal no es válido</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 form-group">
+                <label for="branch_office_cologne">Colonia</label>
+                <ng-select id="branch_office_cologne"
+                           class="form-control-select"
+                           formControlName="branch_office_cologne"
+                           [ngClass]="{ 'is-invalid error': _submitted && controls.branch_office_cologne.errors }">
+                    <ng-option value="" disabled selected>Colonia</ng-option>
+                    <ng-option *ngFor="let item of _colognes" [value]="item.id">{{item.name}}</ng-option>
+                </ng-select>
+                <div *ngIf="_submitted && controls.branch_office_cologne.errors" class="invalid-feedback">
+                    <div *ngIf="controls.branch_office_cologne.errors.required">Colonia es requerida</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 form-group">
+                <label for="branch_office_location">Localidad</label>
+                <ng-select id="branch_office_location"
+                           class="form-control-select"
+                           formControlName="branch_office_location"
+                           [ngClass]="{ 'is-invalid error': _submitted && controls.branch_office_location.errors }">
+                    <ng-option value="" disabled selected>Localidad</ng-option>
+                    <ng-option *ngFor="let item of _locations" [value]="item.id">{{item.name}}</ng-option>
+                </ng-select>
+                <div *ngIf="_submitted && controls.branch_office_location.errors"
+                     class="invalid-feedback">
+                    <div *ngIf="controls.branch_office_location.errors.required">Localidad es requerida</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 form-group">
+                <label for="branch_office_municipality">Municipio</label>
+                <ng-select id="branch_office_municipality"
+                           class="form-control-select"
+                           formControlName="branch_office_municipality"
+                           [ngClass]="{ 'is-invalid error': _submitted && controls.branch_office_municipality.errors }">
+                    <ng-option value="" disabled selected>Municipio</ng-option>
+                    <ng-option *ngFor="let item of _municipalities" [value]="item.id">{{item.name}}</ng-option>
+                </ng-select>
+                <div *ngIf="_submitted && controls.branch_office_municipality.errors"
+                     class="invalid-feedback">
+                    <div *ngIf="controls.branch_office_municipality.errors.required"> Municipio es requerido</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 form-group">
+                <label for="branch_office_state_country">Estado</label>
+                <ng-select id="branch_office_state_country"
+                           class="form-control-select"
+                           formControlName="branch_office_state_country"
+                           [ngClass]="{ 'is-invalid error': _submitted && controls.branch_office_state_country.errors }">
+                    <ng-option value="" disabled selected>Estado</ng-option>
+                    <ng-option *ngFor="let item of _states_countries" [value]="item.id">{{item.name}}</ng-option>
+                </ng-select>
+                <div *ngIf="_submitted && controls.branch_office_state_country.errors" class="invalid-feedback">
+                    <div *ngIf="controls.branch_office_state_country.errors.required">Estado es requerido</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 form-group">
+                <label for="branch_office_country">País</label>
+                <ng-select id="branch_office_country"
+                           class="form-control-select"
+                           formControlName="branch_office_country"
+                           [ngClass]="{ 'is-invalid error': _submitted && controls.branch_office_country.errors }"
+                           (ngModelChange)="onChangeCountry($event)">
+                    <ng-option value="" disabled selected>País</ng-option>
+                    <ng-option *ngFor="let item of _countries" [value]="item.id">{{item.name}}</ng-option>
+                </ng-select>
+                <div *ngIf="_submitted && controls.branch_office_country.errors"
+                     class="invalid-feedback">
+                    <div *ngIf="controls.branch_office_country.errors.required">País es requerido</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success" rippleEffect> Guardar</button>
+        <button type="button" class="btn btn-secondary" (click)="onClose()" rippleEffect> Cancelar</button>
+    </div>
+</form>

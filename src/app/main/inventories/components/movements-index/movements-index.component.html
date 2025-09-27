@@ -1,0 +1,288 @@
+<div class="card" *ngIf="inventory.id != 0 && showCard">
+    <h5 class="card-header">
+        <div class="d-flex align-items-center">
+            Inventario del producto: {{inventory.product?.description}}
+        </div>
+    </h5>
+    <div class="card-body">
+        <div class="users-list-filter">
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    <label for="number">Número</label>
+                    <fieldset class="form-group">
+                        <input type="text" class="form-control" id="number" name="number" [value]="inventory.folio"
+                            disabled />
+                    </fieldset>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="number">Sucursal</label>
+                    <fieldset class="form-group">
+                        <input type="text" class="form-control" id="branch_office" name="branch_office"
+                            [value]="inventory.branchOffices?.name" disabled />
+                    </fieldset>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="number">Precio</label>
+                    <fieldset class="form-group">
+                        <input type="text" class="form-control" id="price" name="price"
+                            [value]="'$ ' + inventory.sale_price" disabled />
+                    </fieldset>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="number">Cantidad</label>
+                    <fieldset class="form-group">
+                        <input type="text" class="form-control" id="amount" name="amount" [value]="inventory.quantity"
+                            disabled />
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <form [formGroup]="_filterForm" (ngSubmit)="onFilterAll()">
+        <h5 class="card-header">
+            <div class="d-flex align-items-center">Filtro de Búsqueda</div>
+            <div class="d-flex align-items-center heading-elements">
+                <a (click)="onCollapse()" data-action="collapse" tooltipClass="fadeInAnimation" placement="top"
+                    ngbTooltip="{{(_collapseStatus ? 'Mostrar' : 'Cerrar')}}" [ngClass]="{ rotate: _collapseStatus }"
+                    [attr.aria-expanded]="_collapseStatus">
+                    <i class="feather icon-chevron-up font-medium-2 mr-1"></i>
+                </a>
+
+                <a (click)="onFilterAll()" tooltipClass="fadeInAnimation" placement="top" ngbTooltip="Filtrar">
+                    <i data-feather="search" class="cursor-pointer font-medium-2 mr-1"></i>
+                </a>
+
+                <a (click)="onClean()" tooltipClass="fadeInAnimation" placement="top" ngbTooltip="Limpiar">
+                    <i data-feather="droplet" class="cursor-pointer font-medium-2 mr-1"></i>
+                </a>
+
+                <a (click)="printPdf()" tooltipClass="fadeInAnimation" placement="top"
+                    ngbTooltip="Imprimir movimientos en pdf">
+                    <i data-feather="file" class="cursor-pointer font-medium-2 mr-1"></i>
+                </a>
+
+                <a (click)="showAll()" tooltipClass="fadeInAnimation" placement="top"
+                    ngbTooltip="Mostrar todos los movimientos">
+                    <i data-feather="refresh-cw" class="cursor-pointer font-medium-2"></i>
+                </a>
+            </div>
+        </h5>
+
+        <div class="card-body" [ngbCollapse]="_collapseStatus">
+            <div class="users-list-filter">
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-12">
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="input-group w-0 pl-1">
+                                    <input name="datepicker" class="form-control" ngbDatepicker
+                                        #datepicker="ngbDatepicker" [autoClose]="'outside'"
+                                        (dateSelect)="onDateSelection($event)" [displayMonths]="2"
+                                        [dayTemplate]="rangeSelectionDP" outsideDays="hidden" [startDate]="fromDate!" />
+                                    <ng-template #rangeSelectionDP let-date let-focused="focused">
+                                        <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+                                            [class.faded]="isHovered(date) || isInside(date)"
+                                            (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                                            {{ date.day }}
+                                        </span>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input #dpFromDate class="form-control" placeholder="dd/mm/yyyy" name="dpFromDate"
+                                        [value]="formatter.format(fromDate)" />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary feather icon-calendar"
+                                            (click)="datepicker.toggle()" type="button" rippleEffect>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group ml-sm-2" style="margin-left: 13px !important;">
+                                <div class="input-group">
+                                    <input #dpToDate class="form-control" placeholder="dd/mm/yyyy" name="dpToDate"
+                                        [value]="formatter.format(toDate)" />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary feather icon-calendar"
+                                            (click)="datepicker.toggle()" type="button" rippleEffect>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                        <label for="categorys_id">Categoría</label>
+                        <ng-select placeholder="Categoría" id="categorys_id" class="form-control-select"
+                            formControlName="categorys_id">
+                            <ng-option *ngFor="let item of _categories" [value]="item.id">
+                                {{item.name}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+
+                    <div class="col-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                        <label for="brands_id">Marca</label>
+                        <ng-select placeholder="Marca" id="brands_id" class="form-control-select"
+                            formControlName="brands_id">
+                            <ng-option *ngFor="let item of _brands" [value]="item.id">
+                                {{item.name}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+
+                    <div class="col-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                        <label for="branch_offices_id">Sucursal</label>
+                        <ng-select placeholder="Buscar" id="branch_offices_id" class="form-control-select"
+                            formControlName="branch_offices_id" [loading]="_loadingBranchOffices">
+                            <ng-option *ngFor="let item of _branchsOffices" [value]="item.id">
+                                {{ item.number + "-" + item.name }}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+
+                    <div class="col-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                        <label for="providers_id">Proveedor</label>
+                        <ng-select placeholder="Buscar" id="providers_id" class="form-control-select"
+                            formControlName="providers_id" [loading]="_loadingProvider">
+                            <ng-option *ngFor="let item of _providers" [value]="item.id">
+                                {{item.reason_social}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+
+                    <div class="col-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                        <label for="product_id">Producto</label>
+                        <ng-select placeholder="Buscar" [loading]="_loadingProduct" id="product_id"
+                            class="form-control-select" name="product_id" formControlName="product_id"
+                            notFoundText="No se encontró." (search)="getAllProductsBySearch($event)" [readonly]="false">
+                            <ng-option *ngFor="let item of _products" [value]="item.id">
+                                {{item.number}} - {{item.name}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+
+                    <div class="col-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                        <label for="motive_movement_id">Motivo de movimiento</label>
+                        <ng-select placeholder="Motivo de movimiento" id="motive_movement_id"
+                            class="form-control-select" formControlName="motive_movement_id">
+                            <ng-option *ngFor="let item of _motive_movements" [value]="item.id">
+                                {{item.name}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+                <button type="submit" class="hidden"></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <div class="row">
+        <div class="col-md-6 col-12">
+            <div class="d-flex justify-content-between align-items-center m-1">
+                <label class="d-flex align-items-center">Mostrar
+                    <select class="form-control mx-25" [(ngModel)]="_pageModel.limit"
+                        (ngModelChange)="onChangeLimit($event)">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    entradas
+                </label>
+            </div>
+        </div>
+        <div class="col-md-6 col-12 d-flex justify-content-start justify-content-md-end">
+            <div class="d-flex align-items-center ml-1 ml-md-0">
+                <form [formGroup]="_filterSearch">
+                    <input type="text" class="form-control ml-25" formControlName="search" spellcheck="false"
+                        placeholder="Buscar" (keyup)="onSearchFilter()" />
+                </form>
+            </div>
+            <div class="d-flex align-items-center justify-content-end pr-1 pb-1 pb-md-0"
+                *appPermission="_permissions.create">
+                <button *ngIf="inventory.id != 0 && showCard" type="button" class="btn btn-primary ml-1" rippleEffect
+                    (click)="onModalAdjustmentInventoryOpen()">
+                    <i data-feather="plus" class="d-sm-none d-inline-block mr-0 mr-sm-1"></i>
+                    <span class="d-none d-sm-inline-block">Ajustar inventario</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <ngx-datatable class="bootstrap core-bootstrap" [rows]="rows" [columnMode]="ColumnMode.force" [headerHeight]="50"
+        [footerHeight]="50" [rowHeight]="'auto'" [scrollbarH]="true" [externalPaging]="true" [externalSorting]="true"
+        [loadingIndicator]="true" [count]="_pageModel.count" [offset]="_pageModel.offset" [limit]="_pageModel.limit"
+        [sortType]="SortType.single" (page)="onPageCallback($event)" (sort)="onSortCallback($event)">
+
+        <ngx-datatable-column name="Folio" prop="number" [width]="25" [sortable]="false">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Inventario" [width]="25" [sortable]="false">
+            <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                <div class="d-flex align-items-center">
+                    {{ row.inventory?.folio }}-{{ row.inventory?.product?.name }}
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Fecha" prop="date" [width]="25">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Cantidad" prop="amount" [width]="25" [sortable]="false">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Operación" prop="motive_movement.operation" [width]="25" [sortable]="false">
+            <ng-template let-row="row" let-operation="value" ngx-datatable-cell-template>
+                <div class="align-items-center">
+                    {{ (operation === 'SUM') ? 'Adición' : ((operation === 'SUBTRACTION') ? 'Disminución' : 'Ajuste') }}
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Total" prop="balance" [width]="25" [sortable]="false">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Motivo" prop="motive_movement.name" [width]="25" [sortable]="false">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Obeservación" [width]="25" [sortable]="false">
+            <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                <div class="d-flex align-items-center">
+                    {{ row.observation}}
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Usuario" prop="user_name" [width]="25">
+            <ng-template let-row="row" let-user="value" ngx-datatable-cell-template>
+                <div class="align-items-center">
+                    {{ row.user.name + ' ' + row.user.last_name }}
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ng-container>
+            <ngx-datatable-column name="Acciones" [width]="25" [sortable]="false">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                    <a (click)="onModalUpdateMovementOpen(row)" class="text-primary" tooltipClass="fadeInAnimation"
+                        placement="left-bottom" ngbTooltip="Editar" *appPermission="_permissions.update">
+                        <span [data-feather]="'edit'" [size]="16" [class]="'mr-50'"></span>
+                    </a>
+                    <a (click)="onDestroy(row)" class="text-danger" tooltipClass="fadeInAnimation"
+                        placement="left-bottom" ngbTooltip="Eliminar" *appPermission="_permissions.destroy">
+                        <span [data-feather]="'trash-2'" [size]="16" [class]="'mr-50'"></span>
+                    </a>
+                </ng-template>
+            </ngx-datatable-column>
+        </ng-container>
+    </ngx-datatable>
+</div>

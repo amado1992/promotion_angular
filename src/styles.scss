@@ -1,0 +1,138 @@
+@import '@core/scss/core.scss';
+@import './assets/scss/styles';
+@import '@core/scss/angular/libs/select.component.scss';
+@import '@core/scss/angular/libs/toastr.component.scss';
+
+// Menu
+.main-menu.menu-light .navigation {
+  background: #0065d7;
+}
+
+.main-menu .main-menu-content {
+  background: #0065d7;
+}
+
+.main-menu.menu-light .navigation>li ul .active {
+  background: -webkit-linear-gradient(332deg, #fff, rgba(255, 255, 255, 0.7));
+  background: linear-gradient(118deg, #fff, rgba(255, 255, 255, .7));
+  box-shadow: 0 0 10px 1px rgb(0, 101, 215);
+  border-radius: 4px;
+  z-index: 1;
+  color: #0065d7;
+}
+
+.main-menu.menu-light .navigation>li.active>a {
+  background: -webkit-linear-gradient(332deg, #fff, rgba(255, 255, 255, .7));
+  background: linear-gradient(118deg, #fff, rgba(255, 255, 255, .7));
+  box-shadow: 0 0 10px 1px rgb(0, 101, 215);
+  color: #0065d7;
+  font-weight: 400;
+  border-radius: 4px;
+}
+
+.main-menu.menu-light .navigation>li.active>a>li>img#dashboard {
+  content: url("assets/images/icons/system/menu/icon_home_blue.svg");
+}
+
+.main-menu.menu-light .navigation>li.open>ul>li.active>a>li>img#branchOffices-index {
+  content: url("assets/images/icons/system/menu/icon_branch_office_blue.svg");
+}
+
+.main-menu.menu-light .navigation>li.open>ul>li.active>a>li>img#customers-index {
+  content: url("assets/images/icons/system/menu/icon_customer_blue.svg");
+}
+
+.main-menu.menu-light .navigation>li.open>ul>li.active>a>li>img#products-index {
+  content: url("assets/images/icons/system/menu/icon_product_blue.svg");
+}
+
+.main-menu.menu-light .navigation>li.active>a>li>img#user-index {
+  content: url("assets/images/icons/system/menu/icon_user_blue.svg");
+}
+
+.main-menu.menu-light .navigation>li.active>a>li>img#role-index {
+  content: url("assets/images/icons/system/menu/icon_role_blue.svg");
+}
+
+.main-menu.menu-light .navigation>li.active>a>li>img#configuration {
+  content: url("assets/images/icons/system/menu/icon_configuration_blue.svg");
+}
+
+/*Promoscp platform*/
+.main-menu.menu-light .navigation>li.active>a>li>img#order {
+  content: url("assets/images/icons/system/menu/icon_ordenes_blue.svg");
+}
+
+.main-menu.menu-light .navigation>li.active>a>li>img#client {
+  content: url("assets/images/icons/system/menu/icon_clientes_blue.svg");
+}
+
+.main-menu.menu-light .navigation>li.active>a>li>img#product {
+  content: url("assets/images/icons/system/menu/icon_productos_blue.svg");
+}
+
+.main-menu.menu-light .navigation>li.active>a>li>img#branch {
+  content: url("assets/images/icons/system/menu/icon_sucursales_blue.svg");
+}
+
+.main-menu.menu-light .navigation>li.active>a>li>img#inventory {
+  content: url("assets/images/icons/system/menu/icon_inventories_blue.svg");
+}
+
+.main-menu.menu-light .navigation>li.active>a>li>img#providers-index {
+  content: url("assets/images/icons/system/menu/icon_provider_blue.svg");
+}
+
+/*End Promoscp platform*/
+
+.main-menu.menu-light .navigation li a {
+  color: #fff;
+}
+
+.main-menu.menu-light .navigation>li ul .active>a {
+  color: #0065d7;
+}
+
+.main-menu.menu-light .navigation>li.open:not(.menu-item-closing)>a,
+.main-menu.menu-light .navigation>li.sidebar-group-active>a {
+  color: #0065d7;
+  background: #fff;
+}
+
+.ico-r {
+  position: relative;
+  top: -0.5rem;
+  right: 0.25rem;
+}
+
+.nav-link.active span {
+  color: #fff;
+}
+
+.nav-link .change-color {
+  fill: #0065d7;
+}
+
+.nav-link.active .change-color {
+  fill: #fff;
+}
+
+.top-1 {
+  top: 1rem;
+}
+
+.top-2 {
+  top: 2rem;
+}
+
+.top-3 {
+  top: 3rem;
+}
+
+.bg-violet {
+  background-color: #887EF2 !important;
+}
+
+html body {
+  background-color: #dbecfc;
+}

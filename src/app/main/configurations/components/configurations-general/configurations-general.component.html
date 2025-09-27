@@ -1,0 +1,306 @@
+<!-- header media -->
+<div class="media">
+    <div *ngIf="photo !== ''; else configurationPhoto">
+        <img class="rounded mr-50"
+             src="{{ photo }}"
+             height="76"
+             width="80"
+             alt="Imagen"/>
+    </div>
+    <ng-template #configurationPhoto>
+        <div class="rounded mr-50 bg-light-success">
+            <div class="avatar-content m-2 text-center">
+                {{ 'Configuration General' | initials | uppercase }}
+            </div>
+        </div>
+    </ng-template>
+    <!-- upload and reset button -->
+    <div class="media-body mt-75 ml-1">
+        <button for="account-upload"
+                class="btn btn-sm btn-primary mb-75 mr-75"
+                (click)="activatingFile($event)"
+                rippleEffect>
+            Subir
+        </button>
+        <input type="file"
+               name="account-upload"
+               id="account-upload"
+               accept="image/*"
+               hidden
+               (change)="onSaveAvatar($event)"/>
+        <button class="btn btn-sm btn-outline-secondary mb-75"
+                (click)="onResetAvatar()"
+                rippleEffect>
+            Reiniciar
+        </button>
+        <p>JPG o PNG permitido. Tamaño máximo de 1 MB.</p>
+    </div>
+    <!--/ upload and reset button -->
+</div>
+<!--/ header media -->
+
+<!-- PROGRESS -->
+<div class="progress-c">
+    <ng-container *ngIf="_progress > 0">
+        <div class="progress-container">
+            <div class="progress progress-t0">
+                <div class="progress-bar" role="progressbar"
+                     [style.width]="_progress+'%'"
+                     attr.aria-valuenow="{{_progress}}" aria-valuemin="0"
+                     aria-valuemax="100">
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+<!-- / PROGRESS -->
+
+<form class="validate-form mt-1" [formGroup]="_configurationGeneralForm" (ngSubmit)="onSaveConfigurationGeneral()">
+    <div class="row">
+        <div class="col-12 col-md-6 form-group">
+            <label for="trade_name">Nombre Comercial</label>
+            <input type="text"
+                   class="form-control"
+                   id="trade_name"
+                   [ngClass]="{ 'is-invalid': _submittedGeneral && controls.trade_name.errors }"
+                   formControlName="trade_name"
+                   placeholder="Nombre Comercial"/>
+            <div *ngIf="_submittedGeneral && controls.trade_name.errors"
+                 class="invalid-feedback">
+                <div *ngIf="controls.trade_name.errors.required">
+                    Nombre Comercial es requerido
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 form-group">
+            <label for="reason_social">Nombre o Razón Social</label>
+            <input type="text"
+                   class="form-control"
+                   id="reason_social"
+                   [ngClass]="{ 'is-invalid': _submittedGeneral && controls.reason_social.errors }"
+                   formControlName="reason_social"
+                   placeholder="Nombre o Razón Social"/>
+            <div *ngIf="_submittedGeneral && controls.reason_social.errors" class="invalid-feedback">
+                <div *ngIf="controls.reason_social.errors.required">
+                    Nombre o Razón Social es requerido
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 form-group">
+            <label for="rfc">RFC</label>
+            <input type="text"
+                   class="form-control"
+                   id="rfc"
+                   [ngClass]="{ 'is-invalid': _submittedGeneral && controls.rfc.errors }"
+                   formControlName="rfc"
+                   placeholder="RFC"/>
+            <div *ngIf="_submittedGeneral && controls.rfc.errors" class="invalid-feedback">
+                <div *ngIf="controls.rfc.errors.required"> RFC es requerido
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 form-group">
+            <label for="fiscal_regimen">Régimen Fiscal</label>
+            <ng-select id="fiscal_regimen"
+                       class="form-control-select"
+                       formControlName="fiscal_regimen"
+                       [ngClass]="{ 'is-invalid error': _submittedGeneral && controls.fiscal_regimen.errors }">
+                <ng-option value="" disabled selected>Régimen Fiscal</ng-option>
+                <ng-option *ngFor="let item of _fiscal_regimens" [value]="item.id">{{item.description}}</ng-option>
+            </ng-select>
+            <div *ngIf="_submittedGeneral && controls.fiscal_regimen.errors" class="invalid-feedback">
+                <div *ngIf="controls.fiscal_regimen.errors.required">Régimen Fiscal es requerido</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 form-group">
+            <label for="email">Correo Electrónico</label>
+            <input type="text"
+                   class="form-control"
+                   id="email"
+                   [ngClass]="{ 'is-invalid': _submittedGeneral && controls.email.errors }"
+                   formControlName="email"
+                   placeholder="Correo Electrónico"/>
+            <div *ngIf="_submittedGeneral && controls.email.errors" class="invalid-feedback">
+                <div *ngIf="controls.email.errors.required">
+                    Correo Electrónico es requerido
+                </div>
+                <div *ngIf="controls.email.errors.email">
+                    El correo debe ser una dirección de correo electrónico válida
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 form-group">
+            <label for="cellphone">Celular</label>
+            <div class="input-group input-group-merge"
+                 [ngClass]="{ 'is-invalid': _submittedGeneral && controls.cellphone.errors }">
+                <div class="input-group-prepend">
+        <span class="input-group-text"
+              id="area-cellphone">
+            + {{_area}}
+        </span>
+                </div>
+                <input type="text"
+                       class="form-control"
+                       id="cellphone"
+                       mask="00 0000 0000"
+                       [ngClass]="{ 'is-invalid': _submittedGeneral && controls.cellphone.errors }"
+                       formControlName="cellphone"
+                       placeholder="Celular"/>
+            </div>
+            <div *ngIf="_submittedGeneral && controls.cellphone.errors" class="invalid-feedback"
+                 [ngClass]="{ 'd-block': _submittedGeneral && controls.cellphone.errors }">
+                <div *ngIf="controls.cellphone.errors.required"> Celular es requerido</div>
+                <div *ngIf="controls.cellphone.errors.mask"> El formato del celular no es válido</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 form-group">
+            <label for="website">Sitio Web</label>
+            <input type="text"
+                   class="form-control"
+                   id="website"
+                   [ngClass]="{ 'is-invalid': _submittedGeneral && controls.website.errors }"
+                   formControlName="website"
+                   placeholder="Sitio Web"/>
+            <div *ngIf="_submittedGeneral && controls.website.errors" class="invalid-feedback">
+                <div *ngIf="controls.website.errors.required">
+                    Sitio Web es requerido
+                </div>
+            </div>
+        </div>
+        <div class="col-12 pb-1">
+            <h6 class="mb-0 font-medium-5 border-bottom text-primary">Dirección Fiscal</h6>
+        </div>
+        <div class="col-12 col-md-4 form-group">
+            <label for="street">Calle</label>
+            <input type="text"
+                   class="form-control"
+                   id="street"
+                   [ngClass]="{ 'is-invalid error': _submittedGeneral && controls.street.errors }"
+                   formControlName="street"
+                   placeholder="Calle"/>
+            <div *ngIf="_submittedGeneral && controls.street.errors"
+                 class="invalid-feedback">
+                <div *ngIf="controls.street.errors.required"> Calle es requerida</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 form-group">
+            <label for="exterior_number">Nro Exterior</label>
+            <input type="text"
+                   class="form-control"
+                   id="exterior_number"
+                   [ngClass]="{ 'is-invalid error': _submittedGeneral && controls.exterior_number.errors }"
+                   formControlName="exterior_number"
+                   placeholder="Nro Exterior"/>
+            <div *ngIf="_submittedGeneral && controls.exterior_number.errors"
+                 class="invalid-feedback">
+                <div *ngIf="controls.exterior_number.errors.required"> Nro Exterior es requerido</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 form-group">
+            <label for="interior_number">Nro Interior</label>
+            <input type="text"
+                   class="form-control"
+                   id="interior_number"
+                   [ngClass]="{ 'is-invalid error': _submittedGeneral && controls.interior_number.errors }"
+                   formControlName="interior_number"
+                   placeholder="Nro Interior"/>
+            <div *ngIf="_submittedGeneral && controls.interior_number.errors"
+                 class="invalid-feedback">
+                <div *ngIf="controls.interior_number.errors.required"> Nro Interior es requerido</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 form-group">
+            <label for="postal_code">Código Postal</label>
+            <input type="text"
+                   class="form-control"
+                   id="postal_code"
+                   mask="00000"
+                   [ngClass]="{ 'is-invalid': _submittedGeneral && controls.postal_code.errors }"
+                   formControlName="postal_code"
+                   placeholder="Código Postal"
+                   (ngModelChange)="onChangePostalCode($event)"/>
+            <div *ngIf="_submittedGeneral && controls.postal_code.errors" class="invalid-feedback">
+                <div *ngIf="controls.postal_code.errors.required"> Código Postal es requerido</div>
+                <div *ngIf="controls.postal_code.errors.mask"> El formato del código postal no es válido</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 form-group">
+            <label for="cologne">Colonia</label>
+            <ng-select id="cologne"
+                       class="form-control-select"
+                       formControlName="cologne"
+                       [ngClass]="{ 'is-invalid error': _submittedGeneral && controls.cologne.errors }">
+                <ng-option value="" disabled selected>Colonia</ng-option>
+                <ng-option *ngFor="let item of _colognes" [value]="item.id">{{item.name}}</ng-option>
+            </ng-select>
+            <div *ngIf="_submittedGeneral && controls.cologne.errors" class="invalid-feedback">
+                <div *ngIf="controls.cologne.errors.required">Colonia es requerida</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 form-group">
+            <label for="location">Localidad</label>
+            <ng-select id="location"
+                       class="form-control-select"
+                       formControlName="location"
+                       [ngClass]="{ 'is-invalid error': _submittedGeneral && controls.location.errors }">
+                <ng-option value="" disabled selected>Localidad</ng-option>
+                <ng-option *ngFor="let item of _locations" [value]="item.id">{{item.name}}</ng-option>
+            </ng-select>
+            <div *ngIf="_submittedGeneral && controls.location.errors"
+                 class="invalid-feedback">
+                <div *ngIf="controls.location.errors.required">Localidad es requerida</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 form-group">
+            <label for="municipality">Municipio</label>
+            <ng-select id="municipality"
+                       class="form-control-select"
+                       formControlName="municipality"
+                       [ngClass]="{ 'is-invalid error': _submittedGeneral && controls.municipality.errors }">
+                <ng-option value="" disabled selected>Municipio</ng-option>
+                <ng-option *ngFor="let item of _municipalities" [value]="item.id">{{item.name}}</ng-option>
+            </ng-select>
+            <div *ngIf="_submittedGeneral && controls.municipality.errors" class="invalid-feedback">
+                <div *ngIf="controls.municipality.errors.required"> Municipio es requerido</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 form-group">
+            <label for="state_country">Estado</label>
+            <ng-select id="state_country"
+                       class="form-control-select"
+                       formControlName="state_country"
+                       [ngClass]="{ 'is-invalid error': _submittedGeneral && controls.state_country.errors }">
+                <ng-option value="" disabled selected>Estado</ng-option>
+                <ng-option *ngFor="let item of _states_countries" [value]="item.id">{{item.name}}</ng-option>
+            </ng-select>
+            <div *ngIf="_submittedGeneral && controls.state_country.errors" class="invalid-feedback">
+                <div *ngIf="controls.state_country.errors.required">Estado es requerido</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 form-group">
+            <label for="country">País</label>
+            <ng-select id="country"
+                       class="form-control-select"
+                       formControlName="country"
+                       [ngClass]="{ 'is-invalid error': _submittedGeneral && controls.country.errors }"
+                       (ngModelChange)="onChangeCountry($event)">
+                <ng-option value="" disabled selected>País</ng-option>
+                <ng-option *ngFor="let item of _countries" [value]="item.id">{{item.name}}</ng-option>
+            </ng-select>
+            <div *ngIf="_submittedGeneral && controls.country.errors" class="invalid-feedback">
+                <div *ngIf="controls.country.errors.required">País es requerido</div>
+            </div>
+        </div>
+        <div class="col-12 text-right {{_button_show ? '' : 'hidden'}}">
+            <button type="submit"
+                    class="btn btn-success mt-2 mr-1"
+                    rippleEffect> Guardar
+            </button>
+            <button type="button"
+                    class="btn btn-secondary mt-2"
+                    (click)="onCleanConfigurationGeneralForm()"
+                    rippleEffect> Cancelar
+            </button>
+        </div>
+    </div>
+</form>

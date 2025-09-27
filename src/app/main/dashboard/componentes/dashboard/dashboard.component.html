@@ -1,0 +1,82 @@
+<div class="container add-container">
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+            <div class="card d-flex flex-row align-content-center">
+                <div class="card-body">
+                    <h5>Ordenes</h5>
+                    <p class="card-text font-small-3 text-primary">Cantidad de ordenes realizadas</p>
+                </div>
+                <div class="mt-1 mr-2"><img height="60" src="assets/images/icons/system/configuration/icon_ordenes.svg"
+                        class="mt-25">
+                    <h3 class="mt-25 text-center">{{ countOrder }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+            <div class="card d-flex flex-row align-content-center">
+                <div class="card-body">
+                    <h5>Clientes</h5>
+                    <p class="card-text font-small-3 text-primary">Cantidad de Clientes</p>
+                </div>
+                <div class="mt-1 mr-2"><img height="60" src="assets/images/icons/system/configuration/icon_customer.svg"
+                        class="mt-25">
+                    <h3 class="mt-25 text-center">{{ countCustomer }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+            <div class="card d-flex flex-row align-content-center">
+                <div class="card-body">
+                    <h5>Productos</h5>
+                    <p class="card-text font-small-3 text-primary">Cantidad de productos</p>
+                </div>
+                <div class="mt-1 mr-2"><img height="60"
+                        src="assets/images/icons/system/configuration/icon_productos.svg" class="mt-25">
+                    <h3 class="mt-25 text-center">{{ countProducts }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+            <div class="card d-flex flex-row align-content-center">
+                <div class="card-body">
+                    <h5>Sucursales</h5>
+                    <p class="card-text font-small-3 text-primary">Cantidad de sucursales</p>
+                </div>
+                <div class="mt-1 mr-2"><img height="60"
+                        src="assets/images/icons/system/configuration/icon_sucursales.svg" class="mt-25">
+                    <h3 class="mt-25 text-center">{{ countBranchOffice }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 h-100">
+            <div class="card">
+                <div
+                    class="card-header d-flex flex-md-row flex-column justify-content-md-between justify-content-start align-items-md-center align-items-start">
+                    <h4 class="card-title">Sucursales con más ordenes</h4>
+                </div>
+                <div class="card-body">
+                    <canvas baseChart [data]="barChartData" [options]="barChartOptions" [plugins]="barChartPlugins"
+                        [legend]="barChartLegend" [type]="'bar'">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 h-100">
+            <div class="card">
+                <div
+                    class="card-header d-flex flex-md-row flex-column justify-content-md-between justify-content-start align-items-md-center align-items-start">
+                    <h4 class="card-title">Productos más solicitados</h4>
+                </div>
+                <div class="card-body">
+                    <canvas baseChart [data]="barChartDataProduct" [options]="barChartOptionsProduct" [plugins]="barChartPluginsPorduct"
+                        [legend]="barChartLegendPorduct" [type]="'bar'">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
