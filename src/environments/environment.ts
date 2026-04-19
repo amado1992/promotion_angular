@@ -5,12 +5,12 @@
 export const environment = {
   production: false,
   hmr: false,
-  //protocol: 'http:',
-  //apiUrl: '127.0.0.1:8000/api/v1/'
+  protocol: 'http:',
+  apiUrl: '127.0.0.1:8000/api/v1/'
 
-  //production
-  protocol: 'https:',
-  apiUrl: 'api.apppromospcapi.com/api/v1/'
+  // production
+  // protocol: 'https:',
+  // apiUrl: 'api.apppromospcapi.com/api/v1/'
 };
 
 /*
